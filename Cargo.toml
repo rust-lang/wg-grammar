@@ -5,6 +5,9 @@ authors = ["The Rust Project Developers"]
 
 [dependencies]
 gll = "0.0.2"
+proc-macro2 = "0.4.0"
+structopt = "0.2.12"
+walkdir = "2.2.6"
 
 [build-dependencies]
 gll = "0.0.2"
