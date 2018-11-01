@@ -176,9 +176,44 @@ fn main() {
                 .map(|entry| entry.unwrap())
                 .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"));
 
+            let mut stdout = io::stdout();
+
             // Go through all the files and try to parse each of them.
             for file in files {
                 let path = file.into_path();
+
+                total_count += 1;
+                if !verbose {
+                    // Limit the compact output to 80 columns wide.
+                    if total_count % 80 == 0 {
+                        println!("");
+                    }
+                }
+
+                // HACK(eddyb) avoid parsing some files that hit
+                // `lykenware/gll` worst-cases (many GBs of RAM usage)
+                // FIXME(eddyb) fix the problems (e.g. implement GC).
+                const BLACKLIST: &[&str] = &[
+                    "libcore/unicode/tables.rs",
+                    "issues/issue-29466.rs",
+                    "issues/issue-29227.rs",
+                ];
+                if BLACKLIST.iter().any(|&b| path.ends_with(b)) {
+                    if verbose {
+                        eprintln!("{}: SKIP (blacklisted)...", path.display());
+                    } else {
+                        print!("S");
+                        stdout.flush().unwrap();
+                    }
+                    continue;
+                }
+
+                // Indicate the current file being parsed in verbose mode.
+                // This can be used to find files to blacklist (see above).
+                if verbose {
+                    eprint!("{}...\r", path.display());
+                }
+
                 parse_file_with(&path, |result| {
                     // Increment counters and figure out the character to print.
                     let mut ambiguity_result = Ok(());
@@ -195,18 +230,13 @@ fn main() {
                         Err(parse::ParseError::NoParse) => ('L', &mut no_parse_count),
                     };
                     *count += 1;
-                    total_count += 1;
 
                     if verbose {
                         // Unless we're in verbose mode, in which case we print more.
                         report_file_result(Some(&path), result, ambiguity_result);
                     } else {
-                        // Limit the compact output to 80 columns wide.
-                        if total_count % 80 == 0 {
-                            println!("");
-                        }
                         print!("{}", status);
-                        io::stdout().flush().unwrap();
+                        stdout.flush().unwrap();
                     }
                 })
             }
