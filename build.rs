@@ -21,6 +21,22 @@ fn main() {
     // Start with the builtin rules for proc-macro grammars.
     let mut grammar = gll::proc_macro::builtin();
 
+    // HACK(eddyb) inject a custom builtin - this should be upstreamed to gll!
+    {
+        use gll::proc_macro::{FlatTokenPat, Pat};
+
+        grammar.define(
+            "LIFETIME",
+            gll::grammar::eat(Pat(vec![
+                FlatTokenPat::Punct {
+                    ch: Some('\''),
+                    joint: Some(true),
+                },
+                FlatTokenPat::Ident(None),
+            ])),
+        );
+    }
+
     // Add in each grammar fragment to the grammar.
     for fragment in fragments {
         let path = fragment.into_path();
