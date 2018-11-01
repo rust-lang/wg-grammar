@@ -1,7 +1,92 @@
-ModuleContents = attrs:InnerAttr* items:ItemWithOuterAttr*;
+ModuleContents = attrs:InnerAttr* items:Item*;
 
-ItemWithOuterAttr = attrs:OuterAttr* item:Item;
-// TODO other items
-Item =
+Item = attrs:OuterAttr* vis:Vis? kind:ItemKind;
+ItemKind =
+    Use:{ "use" use_tree:UseTree ";" } |
     ExternCrate:{ "extern" "crate" name:IDENT { "as" rename:IDENT }? ";" } |
-    Use:{ "use" path:Path { "as" rename:IDENT }? ";" }; // TODO use trees
+    Mod:{ "mod" name:IDENT { ";" | "{" contents:ModuleContents "}" } } |
+    ForeignMod:{ "extern" abi:Abi "{" attrs:InnerAttr* items:ForeignItem* "}" } |
+    Static:{ "static" mutable:"mut"? name:IDENT ":" ty:Type "=" value:Expr ";" } |
+    Const:{ "const" name:IDENT ":" ty:Type "=" value:Expr ";" } |
+    Fn:{ header:FnHeader "fn" decl:FnDecl body:Block } |
+    TypeAlias:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" } |
+    ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" } |
+    Enum:{ "enum" name:IDENT generics:Generics? where_clause:WhereClause? "{" variants:EnumVariant* % "," ","? "}" } |
+    Struct:{ "struct" name:IDENT generics:Generics? body:StructBody } |
+    Union:{ "union" name:IDENT generics:Generics? where_clause:WhereClause? "{" fields:RecordField* % "," ","? "}" } |
+    Trait:{
+        unsafety:"unsafe"? auto:"auto"? "trait" name:IDENT generics:Generics?
+        { ":" superbounds:TypeBound* % "+" "+"? }?
+        where_clause:WhereClause? "{" trait_items:TraitItem* "}"
+    } |
+    TraitAlias:{
+        "trait" name:IDENT generics:Generics?
+        { ":" superbounds:TypeBound* % "+" "+"? }?
+        where_clause:WhereClause? "=" bounds:TypeBound* % "+" "+"? ";"
+    } |
+    Impl:{
+        defaultness:"default"? unsafety:"unsafe"? "impl" generics:Generics?
+        { negate:"!"? trait_path:Path "for" }? ty:Type
+        where_clause:WhereClause? "{" attrs:InnerAttr* impl_items:ImplItem* "}"
+    } |
+    Macro:{ "macro" name:IDENT { "(" TOKEN_TREE* ")" }? "{" TOKEN_TREE* "}" } |
+    MacroCall:ItemMacroCall;
+
+UseTree =
+    Glob:{ prefix:UseTreePrefix? "*" } |
+    Nested:{ prefix:UseTreePrefix? "{" children:UseTree* % "," ","? "}" } |
+    Simple:{ path:Path { "as" rename:IDENT }? };
+UseTreePrefix =
+    Path:{ path:Path "::" } |
+    Global:"::";
+
+ForeignItem = attrs:OuterAttr* vis:Vis? kind:ForeignItemKind;
+ForeignItemKind =
+    Static:{ "static" mutable:"mut"? name:IDENT ":" ty:Type ";" } |
+    Fn:{ "fn" decl:FnDecl ";" } |
+    Type:{ "type" name:IDENT ";" } |
+    MacroCall:ItemMacroCall;
+
+TraitItem = attrs:OuterAttr* kind:TraitItemKind;
+TraitItemKind =
+    Const:{ "const" name:IDENT ":" ty:Type { "=" default:Expr }? ";" } |
+    Fn:{ header:FnHeader "fn" decl:FnDecl { default_body:Block | ";" } } |
+    Type:{ "type" name:IDENT generics:Generics? { ":" bounds:TypeBound* % "+" "+"? }? where_clause:WhereClause? { "=" default:Type }? ";" } |
+    MacroCall:ItemMacroCall;
+
+ImplItem = attrs:OuterAttr* defaultness:"default"? vis:Vis? kind:ImplItemKind;
+ImplItemKind =
+    Const:{ "const" name:IDENT ":" ty:Type "=" value:Expr ";" } |
+    Fn:{ header:FnHeader "fn" decl:FnDecl body:Block } |
+    Type:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" } |
+    ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" } |
+    MacroCall:ItemMacroCall;
+
+FnHeader = constness:"const"? unsafety:"unsafe"? asyncness:"async"? { "extern" abi:Abi }?;
+FnDecl = name:IDENT generics:Generics? "(" args:FnArgs? ","? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
+
+// FIXME(eddyb) find a way to express this `A* B?` pattern better
+FnArgs =
+    Regular:FnArg+ % "," |
+    Variadic:"..." |
+    RegularAndVariadic:{ args:FnArg+ % "," "," "..." };
+FnArg =
+    SelfValue:{ mutable:"mut"? "self" } |
+    SelfRef:{ "&" lt:LIFETIME? mutable:"mut"? "self" } |
+    Regular:FnSigInput;
+
+EnumVariant = attrs:OuterAttr* name:IDENT kind:EnumVariantKind { "=" discr:Expr }?;
+EnumVariantKind =
+    Unit:{} |
+    Tuple:{ "(" fields:TupleField* % "," ","? ")" } |
+    Record:{ "{" fields:RecordField* % "," ","? "}" };
+
+// FIXME(eddyb) could maybe be shared more with `EnumVariantKind`?
+// The problem is the semicolons for `Unit` and `Tuple`, and the where clauses.
+StructBody =
+    Unit:{ where_clause:WhereClause? ";" } |
+    Tuple:{ "(" fields:TupleField* % "," ","? ")" where_clause:WhereClause? ";" } |
+    Record:{ where_clause:WhereClause? "{" fields:RecordField* % "," ","? "}" };
+
+TupleField = attrs:OuterAttr* vis:Vis? ty:Type;
+RecordField = attrs:OuterAttr* vis:Vis? name:IDENT ":" ty:Type;
