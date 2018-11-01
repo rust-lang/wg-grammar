@@ -68,12 +68,37 @@ fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult) -> R) ->
 
 /// Output the result of a single file to stderr,
 /// optionally prefixed by a given `path`.
-fn report_file_result(path: Option<&Path>, result: ModuleContentsResult) {
+fn report_file_result(
+    path: Option<&Path>,
+    result: ModuleContentsResult,
+    ambiguity_result: Result<(), MoreThanOne>,
+) {
     if let Some(path) = path {
         eprint!("{}: ", path.display());
     }
-    // FIXME(eddyb) when we start parsing more this could become quite noisy.
-    eprintln!("{:#?}", result);
+    // Avoid printing too much, especially not any parse nodes.
+    match (result, ambiguity_result) {
+        (Ok(_), Ok(_)) => eprintln!("OK"),
+        (Ok(_), Err(_)) => eprintln!("OK (ambiguous)"),
+        (Err(parse::ParseError::TooShort(handle)), _) => {
+            eprint!("FAIL after ");
+
+            #[cfg(procmacro2_semver_exempt)]
+            {
+                // HACK(eddyb) work around `proc-macro2` `Span` printing limitation
+                let end_location = handle.source_info().end.end();
+                eprintln!("{}:{}", end_location.line, end_location.column);
+            }
+            #[cfg(not(procmacro2_semver_exempt))]
+            {
+                eprintln!(
+                    "(missing location information; \
+                     set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
+                );
+            }
+        }
+        (Err(parse::ParseError::NoParse), _) => eprintln!("FAIL (lexer error?)"),
+    }
 }
 
 fn ambiguity_check(handle: ModuleContentsHandle) -> Result<(), MoreThanOne> {
@@ -118,8 +143,11 @@ fn main() {
         } => {
             // Not much to do, try to parse the file and report the result.
             parse_file_with(&file, |result| {
+                let mut ambiguity_result = Ok(());
                 match result {
                     Ok(handle) | Err(parse::ParseError::TooShort(handle)) => {
+                        ambiguity_result = ambiguity_check(handle);
+
                         if let Some(out_path) = graphviz_forest {
                             handle
                                 .parser
@@ -130,7 +158,7 @@ fn main() {
                     }
                     Err(parse::ParseError::NoParse) => {}
                 }
-                report_file_result(None, result);
+                report_file_result(None, result, ambiguity_result);
             });
         }
         Command::Dir { verbose, dir } => {
@@ -153,23 +181,25 @@ fn main() {
                 let path = file.into_path();
                 parse_file_with(&path, |result| {
                     // Increment counters and figure out the character to print.
+                    let mut ambiguity_result = Ok(());
                     let (status, count) = match result {
                         Ok(handle) => {
-                            if ambiguity_check(handle).is_ok() {
-                                ('~', &mut unambiguous_count)
+                            ambiguity_result = ambiguity_check(handle);
+                            if ambiguity_result.is_ok() {
+                                ('.', &mut unambiguous_count)
                             } else {
-                                ('!', &mut ambiguous_count)
+                                ('-', &mut ambiguous_count)
                             }
                         }
-                        Err(parse::ParseError::TooShort(_)) => ('.', &mut too_short_count),
-                        Err(parse::ParseError::NoParse) => ('X', &mut no_parse_count),
+                        Err(parse::ParseError::TooShort(_)) => ('X', &mut too_short_count),
+                        Err(parse::ParseError::NoParse) => ('L', &mut no_parse_count),
                     };
                     *count += 1;
                     total_count += 1;
 
                     if verbose {
                         // Unless we're in verbose mode, in which case we print more.
-                        report_file_result(Some(&path), result);
+                        report_file_result(Some(&path), result, ambiguity_result);
                     } else {
                         // Limit the compact output to 80 columns wide.
                         if total_count % 80 == 0 {
@@ -187,7 +217,7 @@ fn main() {
             println!("* {} parsed fully and unambiguously", unambiguous_count);
             println!("* {} parsed fully (but ambiguously)", ambiguous_count);
             println!("* {} parsed partially (only a prefix)", too_short_count);
-            println!("* {} didn't parse at all", no_parse_count);
+            println!("* {} didn't parse at all (lexer error?)", no_parse_count);
         }
     }
 }
