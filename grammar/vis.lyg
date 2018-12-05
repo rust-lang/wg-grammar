@@ -1,9 +1,12 @@
 Vis =
-    Crate:"crate" |
-    Pub:"pub" |
-    Restricted:{ "pub" "(" restriction:VisRestriction ")" };
+  // unstable(crate_visibility_modifier):
+  | Crate:"crate"
+  | Pub:"pub"
+  | Restricted:{ "pub" "(" restriction:VisRestriction ")" }
+  ;
 VisRestriction =
-    Crate:"crate" |
-    Self_:"self" |
-    Super:"super" |
-    Path:{ "in" path:Path };
+  | Crate:"crate"
+  | Self_:"self"
+  | Super:"super"
+  | Path:{ "in" path:Path }
+  ;
