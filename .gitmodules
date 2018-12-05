@@ -1,0 +1,3 @@
+[submodule "external/rust"]
+	path = external/rust
+	url = git://github.com/rust-lang/rust.git
