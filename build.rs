@@ -11,12 +11,12 @@ fn main() {
 
     // FIXME(eddyb) streamline this process in `gll`.
 
-    // Find all the `.g` grammar fragments in `grammar/`.
+    // Find all the `.lyg` grammar fragments in `grammar/`.
     let fragments = WalkDir::new("grammar")
         .contents_first(true)
         .into_iter()
         .map(|entry| entry.unwrap())
-        .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "g"));
+        .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "lyg"));
 
     // Start with the builtin rules for proc-macro grammars.
     let mut grammar = gll::proc_macro::builtin();
