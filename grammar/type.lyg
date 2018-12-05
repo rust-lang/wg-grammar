@@ -14,6 +14,7 @@ Type =
     } |
     ImplTrait:{ "impl" bounds:TypeBound+ % "+" "+"? } |
     DynTrait:{ "dyn"? bounds:TypeBound+ % "+" "+"? } |
+    // unstable(not exposed to users):
     TypeOf:{ "typeof" "(" expr:Expr ")" } |
     MacroCall:MacroCall;
 

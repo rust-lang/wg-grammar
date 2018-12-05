@@ -10,6 +10,7 @@ WhereClause = "where" bounds:WhereBound* % "," ","?;
 WhereBound =
     Lifetime:{ lt:LIFETIME ":" bounds:LifetimeBound* % "+" "+"? } |
     Type:{ binder:ForAllBinder? ty:Type ":" bounds:TypeBound* % "+" "+"? } |
+    // unstable:
     TypeEq:{ binder:ForAllBinder? left:Type { "=" | "==" } right:Type };
 
 LifetimeBound = outlives:LIFETIME;

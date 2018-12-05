@@ -1,4 +1,5 @@
 Vis =
+    // unstable(crate_visibility_modifier):
     Crate:"crate" |
     Pub:"pub" |
     Restricted:{ "pub" "(" restriction:VisRestriction ")" };
