@@ -1,11 +1,13 @@
 Pat =
     Wild:"_" |
     Literal:{ minus:"-"? lit:LITERAL } |
+    // unstable(exclusive_range_pattern):
     Range:{ start:PatRangeValue ".." end:PatRangeValue } |
     RangeInclusive:{ start:PatRangeValue { "..." | "..=" } end:PatRangeValue } |
     Binding:{ binding:Binding { "@" subpat:Pat }? } |
     Paren:{ "(" pat:Pat ")" } |
     Ref:{ "&" mutable:"mut"? pat:Pat } |
+    // unstable(box_patterns):
     Box:{ "box" pat:Pat } |
     Slice:{ "[" elems:SlicePatElem* % "," ","? "]" } |
     Tuple:{ "(" fields:TuplePatField* % "," ","? ")" } |

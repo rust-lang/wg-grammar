@@ -10,6 +10,7 @@ ExprKind =
     Assign:{ left:Expr { "=" | op:BinaryAssignOp } right:Expr } |
     Range:{ start:Expr? ".." end:Expr? } |
     RangeInclusive:{ start:Expr? "..=" end:Expr } |
+    // unstable(type_ascription):
     Type:{ expr:Expr ":" ty:Type } |
     Cast:{ expr:Expr "as" ty:Type } |
     Field:{ base:Expr "." field:FieldName } |
@@ -22,11 +23,14 @@ ExprKind =
     MethodCall:{ receiver:Expr "." method:PathSegment "(" args:Expr* % "," ","? ")" } |
     Struct:{ path:Path "{" attrs:InnerAttr* fields:StructExprFieldsAndBase "}" } |
     Block:{ { label:Label ":" }? unsafety:"unsafe"? block:Block } |
+    // ustable(async_await):
     AsyncBlock:{ "async" block:Block } |
+    // unstable(try_block):
     TryBlock:{ "try" block:Block } |
     Continue:{ "continue" label:Label? } |
     Break:{ "break" label:Label? value:Expr? } |
     Return:{ "return" value:Expr? } |
+    // unstable(generators):
     Yield:{ "yield" value:Expr? } |
     If:If |
     Match:{ "match" expr:Expr "{" attrs:InnerAttr* arms:MatchArm* "}" } |
@@ -34,7 +38,11 @@ ExprKind =
     While:{ { label:Label ":" }? "while" cond:Cond body:Block } |
     For:{ { label:Label ":" }? "for" pat:Pat "in" expr:Expr body:Block } |
     Closure:{
-        generator_static:"static"? asyncness:"async"? by_val:"move"?
+        // unstable(generators):
+        generator_static:"static"?
+        // unstable(async_await):
+        asyncness:"async"?
+        by_val:"move"?
         "|" args:ClosureArg* % "," ","? "|" { "->" ret_ty:Type }? body:Expr
     } |
     MacroCall:MacroCall;

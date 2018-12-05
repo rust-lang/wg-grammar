@@ -10,25 +10,33 @@ ItemKind =
     Const:{ "const" name:IDENT ":" ty:Type "=" value:Expr ";" } |
     Fn:{ header:FnHeader "fn" decl:FnDecl body:Block } |
     TypeAlias:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" } |
+    // unstable(existential_type):
     ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" } |
     Enum:{ "enum" name:IDENT generics:Generics? where_clause:WhereClause? "{" variants:EnumVariant* % "," ","? "}" } |
     Struct:{ "struct" name:IDENT generics:Generics? body:StructBody } |
     Union:{ "union" name:IDENT generics:Generics? where_clause:WhereClause? "{" fields:RecordField* % "," ","? "}" } |
     Trait:{
-        unsafety:"unsafe"? auto:"auto"? "trait" name:IDENT generics:Generics?
+        unsafety:"unsafe"?
+        // unstable(optin_builtin_traits):
+        auto:"auto"?
+        "trait" name:IDENT generics:Generics?
         { ":" superbounds:TypeBound* % "+" "+"? }?
         where_clause:WhereClause? "{" trait_items:TraitItem* "}"
     } |
+    // unstable(trait_alias):
     TraitAlias:{
         "trait" name:IDENT generics:Generics?
         { ":" superbounds:TypeBound* % "+" "+"? }?
         where_clause:WhereClause? "=" bounds:TypeBound* % "+" "+"? ";"
     } |
     Impl:{
-        defaultness:"default"? unsafety:"unsafe"? "impl" generics:Generics?
+        // unstable(specialization):
+        defaultness:"default"?
+        unsafety:"unsafe"? "impl" generics:Generics?
         { negate:"!"? trait_path:Path "for" }? ty:Type
         where_clause:WhereClause? "{" attrs:InnerAttr* impl_items:ImplItem* "}"
     } |
+    // unstable(decl_macro):
     Macro:{ "macro" name:IDENT { "(" TOKEN_TREE* ")" }? "{" TOKEN_TREE* "}" } |
     MacroCall:ItemMacroCall;
 
@@ -44,7 +52,9 @@ ForeignItem = attrs:OuterAttr* vis:Vis? kind:ForeignItemKind;
 ForeignItemKind =
     Static:{ "static" mutable:"mut"? name:IDENT ":" ty:Type ";" } |
     Fn:{ "fn" decl:FnDecl ";" } |
+    // unstable(extern_types):
     Type:{ "type" name:IDENT ";" } |
+    // unstable(macros_in_extern):
     MacroCall:ItemMacroCall;
 
 TraitItem = attrs:OuterAttr* kind:TraitItemKind;
@@ -54,11 +64,16 @@ TraitItemKind =
     Type:{ "type" name:IDENT generics:Generics? { ":" bounds:TypeBound* % "+" "+"? }? where_clause:WhereClause? { "=" default:Type }? ";" } |
     MacroCall:ItemMacroCall;
 
-ImplItem = attrs:OuterAttr* defaultness:"default"? vis:Vis? kind:ImplItemKind;
+ImplItem =
+    attrs:OuterAttr*
+    // unstable(specialization):
+    defaultness:"default"?
+    vis:Vis? kind:ImplItemKind;
 ImplItemKind =
     Const:{ "const" name:IDENT ":" ty:Type "=" value:Expr ";" } |
     Fn:{ header:FnHeader "fn" decl:FnDecl body:Block } |
     Type:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" } |
+    // unstable(existential_type):
     ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" } |
     MacroCall:ItemMacroCall;
 
