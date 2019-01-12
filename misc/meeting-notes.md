@@ -1,3 +1,19 @@
+# 2019-01-09
+
+## tentative agenda
+
+- deal with the in-flight PRs
+- setup travis for the repo
+- mini-roadmap discussion
+
+## action items
+
+- @qmx parallelization with rayon, travis fixes, blacklist => toml.
+- @CAD %% and |=
+- @cramertj  inline unit tests
+- @centril  removing grammar redundancies + spicing up repo structure
+- @ehuss  Making a PR to close issue #1 (charter), cleaning up + enhancing lexical spec in reference, use that to close #3 (lexical spec).
+
 # 2018-11-14
 
 Last wednesday the wg-grammar team had it's biweekly meeting - here are the principal points:
