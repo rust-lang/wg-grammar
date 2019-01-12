@@ -34,6 +34,16 @@ Last wednesday the wg-grammar team had it's biweekly meeting - here are the prin
 4. GLL
 	- formatting
 		- we asked for small changes on the overall feel for GLL grammars, [GLL PR](https://github.com/lykenware/gll/pull/74) with the proposed changes.
+```
+FnArgs =
+  | Regular:FnArg+ % ","
+  | Variadic:"..."
+  | RegularAndVariadic:{ args:FnArg+ % "," "," "..." }
+  ;
+```
+
+We're using leading `|` and moving the other `|` to the start of the line.
 	- syntax changes
 		- there were some discussions about using BNF-like `::=` for attribution of new rules but this went nowhere at least for now.
+                - there were also discussions about having parameterized grammars
 
