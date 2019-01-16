@@ -91,6 +91,7 @@ fn report_file_result(
             }
             #[cfg(not(procmacro2_semver_exempt))]
             {
+                let _ = handle;
                 eprintln!(
                     "(missing location information; \
                      set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
