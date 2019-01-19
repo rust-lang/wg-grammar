@@ -170,12 +170,22 @@ fn main() {
             let mut too_short_count = 0;
             let mut no_parse_count = 0;
 
+            // HACK(eddyb) avoid parsing some files that hit
+            // `lykenware/gll` worst-cases (many GBs of RAM usage)
+            // FIXME(eddyb) fix the problems (e.g. implement GC).
+            const BLACKLIST: &[&str] = &[
+                "libcore/unicode/tables.rs",
+                "issues/issue-29466.rs",
+                "issues/issue-29227.rs",
+            ];
+
             // Find all the `.rs` files inside the desired directory.
             let files = WalkDir::new(dir)
                 .contents_first(true)
                 .into_iter()
                 .map(|entry| entry.unwrap())
-                .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"));
+                .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"))
+                .filter(|entry| !BLACKLIST.iter().any(|&b| entry.path().ends_with(b)));
 
             let mut stdout = io::stdout();
 
@@ -189,24 +199,6 @@ fn main() {
                     if total_count % 80 == 0 {
                         println!("");
                     }
-                }
-
-                // HACK(eddyb) avoid parsing some files that hit
-                // `lykenware/gll` worst-cases (many GBs of RAM usage)
-                // FIXME(eddyb) fix the problems (e.g. implement GC).
-                const BLACKLIST: &[&str] = &[
-                    "libcore/unicode/tables.rs",
-                    "issues/issue-29466.rs",
-                    "issues/issue-29227.rs",
-                ];
-                if BLACKLIST.iter().any(|&b| path.ends_with(b)) {
-                    if verbose {
-                        eprintln!("{}: SKIP (blacklisted)...", path.display());
-                    } else {
-                        print!("S");
-                        stdout.flush().unwrap();
-                    }
-                    continue;
                 }
 
                 // Indicate the current file being parsed in verbose mode.
