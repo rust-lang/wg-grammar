@@ -1,15 +1,18 @@
 extern crate gll;
 extern crate proc_macro2;
+extern crate rayon;
 extern crate rust_grammar;
 extern crate structopt;
 extern crate walkdir;
 
 use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
+use rayon::prelude::*;
 use rust_grammar::parse;
 use std::collections::{BTreeSet, VecDeque};
 use std::fs;
 use std::io;
 use std::io::prelude::*;
+use std::ops::Add;
 use std::path::{Path, PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
@@ -136,6 +139,87 @@ fn ambiguity_check(handle: ModuleContentsHandle) -> Result<(), MoreThanOne> {
     Ok(())
 }
 
+#[derive(Debug)]
+struct Counters {
+    total_count: u16,
+    unambiguous_count: u16,
+    ambiguous_count: u16,
+    too_short_count: u16,
+    no_parse_count: u16,
+}
+
+impl Add for Counters {
+    type Output = Counters;
+
+    fn add(self, other: Counters) -> Counters {
+        Counters {
+            total_count: self.total_count + other.total_count,
+            unambiguous_count: self.unambiguous_count + other.unambiguous_count,
+            ambiguous_count: self.ambiguous_count + other.ambiguous_count,
+            too_short_count: self.too_short_count + other.too_short_count,
+            no_parse_count: self.no_parse_count + other.no_parse_count,
+        }
+    }
+}
+
+#[derive(Debug)]
+enum ParseResult {
+    Unambiguous,
+    Ambiguous,
+    Partial,
+    Error,
+}
+
+impl ParseResult {
+    fn compact_display(&self) -> String {
+        match self {
+            ParseResult::Unambiguous => "-",
+            ParseResult::Ambiguous => ".",
+            ParseResult::Partial => "X",
+            ParseResult::Error => "L",
+        }
+        .to_string()
+    }
+}
+
+fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
+    let mut stdout = io::stdout();
+    let path = file.into_path();
+
+    // Indicate the current file being parsed in verbose mode.
+    // This can be used to find files to blacklist (see above).
+    if verbose {
+        eprint!("{}...\r", path.display());
+    }
+
+    let out = parse_file_with(&path, |result| {
+        // Increment counters and figure out the character to print.
+        let mut ambiguity_result = Ok(());
+        let status = match result {
+            Ok(handle) => {
+                ambiguity_result = ambiguity_check(handle);
+                if ambiguity_result.is_ok() {
+                    ParseResult::Unambiguous
+                } else {
+                    ParseResult::Ambiguous
+                }
+            }
+            Err(parse::ParseError::TooShort(_)) => ParseResult::Partial,
+            Err(parse::ParseError::NoParse) => ParseResult::Error,
+        };
+        if verbose {
+            // Unless we're in verbose mode, in which case we print more.
+            report_file_result(Some(&path), result, ambiguity_result);
+        } else {
+            print!("{}", status.compact_display());
+            stdout.flush().unwrap();
+        }
+        status
+    });
+
+    out
+}
+
 fn main() {
     match Command::from_args() {
         Command::File {
@@ -163,13 +247,6 @@ fn main() {
             });
         }
         Command::Dir { verbose, dir } => {
-            // Counters for reporting overall stats at the end.
-            let mut total_count = 0;
-            let mut unambiguous_count = 0;
-            let mut ambiguous_count = 0;
-            let mut too_short_count = 0;
-            let mut no_parse_count = 0;
-
             // HACK(eddyb) avoid parsing some files that hit
             // `lykenware/gll` worst-cases (many GBs of RAM usage)
             // FIXME(eddyb) fix the problems (e.g. implement GC).
@@ -187,60 +264,68 @@ fn main() {
                 .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"))
                 .filter(|entry| !BLACKLIST.iter().any(|&b| entry.path().ends_with(b)));
 
-            let mut stdout = io::stdout();
-
             // Go through all the files and try to parse each of them.
-            for file in files {
-                let path = file.into_path();
 
-                total_count += 1;
-                if !verbose {
-                    // Limit the compact output to 80 columns wide.
-                    if total_count % 80 == 0 {
-                        println!("");
-                    }
-                }
-
-                // Indicate the current file being parsed in verbose mode.
-                // This can be used to find files to blacklist (see above).
-                if verbose {
-                    eprint!("{}...\r", path.display());
-                }
-
-                parse_file_with(&path, |result| {
-                    // Increment counters and figure out the character to print.
-                    let mut ambiguity_result = Ok(());
-                    let (status, count) = match result {
-                        Ok(handle) => {
-                            ambiguity_result = ambiguity_check(handle);
-                            if ambiguity_result.is_ok() {
-                                ('.', &mut unambiguous_count)
-                            } else {
-                                ('-', &mut ambiguous_count)
+            let mut counters: Counters = files
+                .par_bridge()
+                .map(|f| process(f, verbose))
+                .fold(
+                    || Counters {
+                        total_count: 0,
+                        ambiguous_count: 0,
+                        unambiguous_count: 0,
+                        too_short_count: 0,
+                        no_parse_count: 0,
+                    },
+                    |mut acc, x| {
+                        acc.total_count += 1;
+                        match x {
+                            ParseResult::Ambiguous => {
+                                acc.ambiguous_count += 1;
                             }
-                        }
-                        Err(parse::ParseError::TooShort(_)) => ('X', &mut too_short_count),
-                        Err(parse::ParseError::NoParse) => ('L', &mut no_parse_count),
-                    };
-                    *count += 1;
-
-                    if verbose {
-                        // Unless we're in verbose mode, in which case we print more.
-                        report_file_result(Some(&path), result, ambiguity_result);
-                    } else {
-                        print!("{}", status);
-                        stdout.flush().unwrap();
-                    }
-                })
-            }
+                            ParseResult::Unambiguous => {
+                                acc.unambiguous_count += 1;
+                            }
+                            ParseResult::Partial => {
+                                acc.too_short_count += 1;
+                            }
+                            ParseResult::Error => {
+                                acc.no_parse_count += 1;
+                            }
+                        };
+                        acc
+                    },
+                )
+                .reduce(
+                    || Counters {
+                        total_count: 0,
+                        ambiguous_count: 0,
+                        unambiguous_count: 0,
+                        too_short_count: 0,
+                        no_parse_count: 0,
+                    },
+                    |a, b| a + b,
+                );
 
             // We're done, time to print out stats!
             println!("");
-            println!("Out of {} Rust files tested:", total_count);
-            println!("* {} parsed fully and unambiguously", unambiguous_count);
-            println!("* {} parsed fully (but ambiguously)", ambiguous_count);
-            println!("* {} parsed partially (only a prefix)", too_short_count);
-            println!("* {} didn't parse at all (lexer error?)", no_parse_count);
+            println!("Out of {} Rust files tested:", counters.total_count);
+            println!(
+                "* {} parsed fully and unambiguously",
+                counters.unambiguous_count
+            );
+            println!(
+                "* {} parsed fully (but ambiguously)",
+                counters.ambiguous_count
+            );
+            println!(
+                "* {} parsed partially (only a prefix)",
+                counters.too_short_count
+            );
+            println!(
+                "* {} didn't parse at all (lexer error?)",
+                counters.no_parse_count
+            );
         }
     }
 }
