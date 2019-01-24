@@ -13,6 +13,10 @@ the Rust language. The primary audiences for the grammar are:
 The grammar tools produced here are not intended to be used directly within
 rustc, or any other existing tools.
 
+## Links
+- [Meeting notes](misc/meeting-notes.md)
+- [Resources](misc/resources.md)
+
 ## License
 
 Licensed under either of
