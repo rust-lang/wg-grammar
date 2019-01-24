@@ -4,6 +4,8 @@ extern crate rayon;
 extern crate rust_grammar;
 extern crate structopt;
 extern crate walkdir;
+#[macro_use]
+extern crate derive_more;
 
 use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
 use rayon::prelude::*;
@@ -12,7 +14,6 @@ use std::collections::{BTreeSet, VecDeque};
 use std::fs;
 use std::io;
 use std::io::prelude::*;
-use std::ops::Add;
 use std::path::{Path, PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
@@ -139,27 +140,13 @@ fn ambiguity_check(handle: ModuleContentsHandle) -> Result<(), MoreThanOne> {
     Ok(())
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default, Add)]
 struct Counters {
     total_count: u16,
     unambiguous_count: u16,
     ambiguous_count: u16,
     too_short_count: u16,
     no_parse_count: u16,
-}
-
-impl Add for Counters {
-    type Output = Counters;
-
-    fn add(self, other: Counters) -> Counters {
-        Counters {
-            total_count: self.total_count + other.total_count,
-            unambiguous_count: self.unambiguous_count + other.unambiguous_count,
-            ambiguous_count: self.ambiguous_count + other.ambiguous_count,
-            too_short_count: self.too_short_count + other.too_short_count,
-            no_parse_count: self.no_parse_count + other.no_parse_count,
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -270,13 +257,7 @@ fn main() {
                 .par_bridge()
                 .map(|f| process(f, verbose))
                 .fold(
-                    || Counters {
-                        total_count: 0,
-                        ambiguous_count: 0,
-                        unambiguous_count: 0,
-                        too_short_count: 0,
-                        no_parse_count: 0,
-                    },
+                    || Counters::default(),
                     |mut acc, x| {
                         acc.total_count += 1;
                         match x {
@@ -296,16 +277,7 @@ fn main() {
                         acc
                     },
                 )
-                .reduce(
-                    || Counters {
-                        total_count: 0,
-                        ambiguous_count: 0,
-                        unambiguous_count: 0,
-                        too_short_count: 0,
-                        no_parse_count: 0,
-                    },
-                    |a, b| a + b,
-                );
+                .reduce(|| Counters::default(), |a, b| a + b);
 
             // We're done, time to print out stats!
             println!("");
