@@ -206,6 +206,27 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     out
 }
 
+fn print_statistics(counters: Counters) {
+    println!("");
+    println!("Out of {} Rust files tested:", counters.total_count);
+    println!(
+        "* {} parsed fully and unambiguously",
+        counters.unambiguous_count
+    );
+    println!(
+        "* {} parsed fully (but ambiguously)",
+        counters.ambiguous_count
+    );
+    println!(
+        "* {} parsed partially (only a prefix)",
+        counters.too_short_count
+    );
+    println!(
+        "* {} didn't parse at all (lexer error?)",
+        counters.no_parse_count
+    );
+}
+
 fn main() {
     match Command::from_args() {
         Command::File {
@@ -279,24 +300,7 @@ fn main() {
                 .reduce(|| Counters::default(), |a, b| a + b);
 
             // We're done, time to print out stats!
-            println!("");
-            println!("Out of {} Rust files tested:", counters.total_count);
-            println!(
-                "* {} parsed fully and unambiguously",
-                counters.unambiguous_count
-            );
-            println!(
-                "* {} parsed fully (but ambiguously)",
-                counters.ambiguous_count
-            );
-            println!(
-                "* {} parsed partially (only a prefix)",
-                counters.too_short_count
-            );
-            println!(
-                "* {} didn't parse at all (lexer error?)",
-                counters.no_parse_count
-            );
+            print_statistics(counters);
         }
     }
 }
