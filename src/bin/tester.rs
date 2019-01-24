@@ -158,14 +158,13 @@ enum ParseResult {
 }
 
 impl ParseResult {
-    fn compact_display(&self) -> String {
+    fn compact_display(&self) -> &'static str {
         match self {
             ParseResult::Unambiguous => "-",
             ParseResult::Ambiguous => ".",
             ParseResult::Partial => "X",
             ParseResult::Error => "L",
         }
-        .to_string()
     }
 }
 
