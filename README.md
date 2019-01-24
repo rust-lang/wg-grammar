@@ -15,12 +15,15 @@ rustc, or any other existing tools.
 
 ## Meeting Schedule
 
-Meetings take place on [Discord] at 20:00 CET every other Wednesday. Feel free
-to drop by the Discord channel if you are interested!
+Meetings take place on the [#wg-grammar channel on Discord][discord] at [20:00
+CET][time] every other Wednesday. Feel free to drop by the Discord channel if
+you are interested!
 
-[Discord]: https://discord.gg/dj9NjJR
+[discord]: https://discord.gg/dj9NjJR
+[time]: https://time.is/compare/2000_in_CET
 
 ## Links
+
 - [Meeting notes](misc/meeting-notes.md)
 - [Resources](misc/resources.md)
 
