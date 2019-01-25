@@ -6,17 +6,50 @@ extern crate structopt;
 extern crate walkdir;
 #[macro_use]
 extern crate derive_more;
+#[macro_use]
+extern crate serde_derive;
+extern crate toml;
 
 use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
 use rayon::prelude::*;
 use rust_grammar::parse;
 use std::collections::{BTreeSet, VecDeque};
-use std::fs;
+use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+struct Blacklist {
+    paths: Vec<String>,
+}
+
+impl Blacklist {
+    fn is_blacklisted(&self, path: &Path) -> bool {
+        self.paths.iter().any(|ref b| path.ends_with(b))
+    }
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+struct Config {
+    blacklist: Blacklist,
+}
+
+impl Config {
+    fn load() -> Result<Config, failure::Error> {
+        let config = match File::open("wg-grammar.toml") {
+            Ok(mut file) => {
+                let mut toml = String::new();
+                file.read_to_string(&mut toml)?;
+                toml::from_str(&toml)?
+            }
+            Err(_) => Config::default(),
+        };
+        Ok(config)
+    }
+}
 
 #[derive(StructOpt)]
 enum Command {
@@ -227,7 +260,7 @@ fn print_statistics(counters: Counters) {
     );
 }
 
-fn main() {
+fn main() -> Result<(), failure::Error> {
     match Command::from_args() {
         Command::File {
             graphviz_forest,
@@ -254,14 +287,7 @@ fn main() {
             });
         }
         Command::Dir { verbose, dir } => {
-            // HACK(eddyb) avoid parsing some files that hit
-            // `lykenware/gll` worst-cases (many GBs of RAM usage)
-            // FIXME(eddyb) fix the problems (e.g. implement GC).
-            const BLACKLIST: &[&str] = &[
-                "libcore/unicode/tables.rs",
-                "issues/issue-29466.rs",
-                "issues/issue-29227.rs",
-            ];
+            let config = Config::load()?;
 
             // Find all the `.rs` files inside the desired directory.
             let files = WalkDir::new(dir)
@@ -269,7 +295,7 @@ fn main() {
                 .into_iter()
                 .map(|entry| entry.unwrap())
                 .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"))
-                .filter(|entry| !BLACKLIST.iter().any(|&b| entry.path().ends_with(b)));
+                .filter(|entry| !config.blacklist.is_blacklisted(entry.path()));
 
             // Go through all the files and try to parse each of them.
 
@@ -303,4 +329,5 @@ fn main() {
             print_statistics(counters);
         }
     }
+    Ok(())
 }
