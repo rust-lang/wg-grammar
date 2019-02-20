@@ -18,6 +18,7 @@ use std::fs::{self, File};
 use std::io;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
+use std::time::{Duration, Instant};
 use structopt::StructOpt;
 use walkdir::WalkDir;
 
@@ -109,7 +110,12 @@ fn report_file_result(
     path: Option<&Path>,
     result: ModuleContentsResult,
     ambiguity_result: Result<(), MoreThanOne>,
+    duration: Option<Duration>,
 ) {
+    if let Some(duration) = duration {
+        eprint!("{:?}: ", duration);
+    }
+
     if let Some(path) = path {
         eprint!("{}: ", path.display());
     }
@@ -205,15 +211,9 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     let mut stdout = io::stdout();
     let path = file.into_path();
 
-    // Indicate the current file being parsed in verbose mode.
-    // This can be used to find files to blacklist (see above).
-    if verbose {
-        eprint!("{}...\r", path.display());
-    }
-
     let out = parse_file_with(&path, |result| {
-        // Increment counters and figure out the character to print.
         let mut ambiguity_result = Ok(());
+        let start = Instant::now();
         let status = match result {
             Ok(handle) => {
                 ambiguity_result = ambiguity_check(handle);
@@ -226,9 +226,9 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
             Err(parse::ParseError::TooShort(_)) => ParseResult::Partial,
             Err(parse::ParseError::NoParse) => ParseResult::Error,
         };
+        let duration = start.elapsed();
         if verbose {
-            // Unless we're in verbose mode, in which case we print more.
-            report_file_result(Some(&path), result, ambiguity_result);
+            report_file_result(Some(&path), result, ambiguity_result, Some(duration));
         } else {
             print!("{}", status.compact_display());
             stdout.flush().unwrap();
@@ -283,7 +283,7 @@ fn main() -> Result<(), failure::Error> {
                     }
                     Err(parse::ParseError::NoParse) => {}
                 }
-                report_file_result(None, result, ambiguity_result);
+                report_file_result(None, result, ambiguity_result, None);
             });
         }
         Command::Dir { verbose, dir } => {
