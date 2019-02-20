@@ -1,3 +1,16 @@
+# 2019-01-23
+
+We're making slow, but steady progress!
+PRs from @CAD97, @cramertj and @ehuss!
+
+1. lykenware/gll maintenance.
+  - The overall consensus is that we need to wrap our brains around it ASAP, and reduce the bus factor.
+  - @cramertj started refactoring/cleaning up some bits, we should probably do the same until we get more clarity around how gll works.
+  - It's clear that we all miss @eddyb :D
+1. Removing the existing grammar from rust-lang/rust: https://github.com/rust-lang-nursery/wg-grammar/issues/9
+  - We punted the topic for the next meeting, there was a suggestion of just moving the old grammar into our repo and linking to it.
+
+
 # 2019-01-09
 
 ## tentative agenda
@@ -13,6 +26,23 @@
 - @cramertj  inline unit tests
 - @centril  removing grammar redundancies + spicing up repo structure
 - @ehuss  Making a PR to close issue #1 (charter), cleaning up + enhancing lexical spec in reference, use that to close #3 (lexical spec).
+
+# 2018-11-28
+
+Summary for today's meeting
+
+* @eddyb#0426  had nothing to report since no progress has been made
+* @Centril#2862  worked on an RFC [rust-lang/rfcs#2602](https://github.com/rust-lang/rfcs/pull/2602) and tested out the GLL syntax, it felt good, https://github.com/Centril/rfcs/blob/rfc/attributes-galore/text/0000-attributes-galore.md#grammar particularly with the `Rule |= Additions;` formatting. @qmx#4460  agreed it was pleasant and that it was "BNF done right".
+* We call the notation in GLL: "lyg".
+  * [x]  Change file ending to `.lyg` after merging PR.
+* @Centril#2862 felt that parameterized grammars could reduce some duplication with e.g. `Bounds<P> = elems:P* % "+" "+"?;` and similar things.
+* [ ]  Cargo features should be tried out for nightly features
+* [ ]  @qmx#4460  needs to: "setup the initial test harness with rust-lang/rust vendored into the grammar repo as a submodule"
+* [ ]  @eddyb#0426  needs to do some stuff on the GLL side;
+* [ ]  @qmx#4460  will work on adding `%%` to GLL
+* [ ]  Test harness is top prio;
+* [x]  @Centril#2862  will work on improving @eddyb#0426's PR wrt. style and such things.
+* [ ]  @ehus might split some work with @qmx.
 
 # 2018-11-14
 
