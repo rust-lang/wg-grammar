@@ -1,7 +1,7 @@
 # 2019-01-23
 
 We're making slow, but steady progress!
-PRs from @CAD97, @cramertj and @ehuss!
+PRs from @CAD97, @cramertj, and @ehuss!
 
 1. lykenware/gll maintenance.
   - The overall consensus is that we need to wrap our brains around it ASAP, and reduce the bus factor.
