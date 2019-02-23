@@ -14,7 +14,7 @@ use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
 use rayon::prelude::*;
 use rust_grammar::parse;
 use std::collections::{BTreeSet, VecDeque};
-use std::fs::{self, File};
+use std::fs;
 use std::io;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
@@ -40,12 +40,8 @@ struct Config {
 
 impl Config {
     fn load() -> Result<Config, failure::Error> {
-        let config = match File::open("wg-grammar.toml") {
-            Ok(mut file) => {
-                let mut toml = String::new();
-                file.read_to_string(&mut toml)?;
-                toml::from_str(&toml)?
-            }
+        let config = match fs::read_to_string("wg-grammar.toml") {
+            Ok(mut toml) => toml::from_str(&toml)?,
             Err(_) => Config::default(),
         };
         Ok(config)
