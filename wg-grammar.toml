@@ -1,0 +1,6 @@
+[blacklist]
+paths = [
+	"libcore/unicode/tables.rs",
+	"issues/issue-29466.rs",
+	"issues/issue-29227.rs",
+]
