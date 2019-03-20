@@ -1,3 +1,26 @@
+# 2019-03-06
+
+- parallel test harness runner landed!
+- we reviewed the content for creating a PR for the Grammar-WG to rust-lang/lang-team
+  - [PR created](https://github.com/rust-lang/lang-team/pull/3)
+- @CAD is still working on [the %% PR](https://github.com/rust-lang-nursery/gll/pull/2)
+- @qmx is taking unit-testing as his next task
+
+  We've had a brief discussion on disambiguation, precedence tables as an
+option to solve this. Since GLL gives us parse forests, we have to figure out a
+way to pick one of the trees.
+
+  We have `$production(.$random_description?)(.$number_in_sequence)?.expected.`
+
+  We test that all of the `.expected` files are in the parse forest.
+  If `$number_in_sequence` is omitted then this asserts uniqueness (the forest is a tree).
+
+  Once we have a way to test the grammar with expectations, we can experiment
+with post-processing the parse forest and remove ambiguities; from that we hope
+to gain a declarative way of specifying disambiguation in `.rs` files.
+Eventually that may be converted into the `.lyg` format.
+        
+
 # 2019-01-23
 
 We're making slow, but steady progress!
