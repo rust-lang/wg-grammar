@@ -30,7 +30,7 @@ times faster. It supports several subcommands to point it at different files
 or directories to examine. For example, if you check out the submodule
 (explained below), you can run the tests with the following command:
 
-    cargo run --release -- dir external/rust/src
+    cargo run --bin coverage --release -- dir external/rust/src
 
 This repository includes a submodule to the main rust repo to use as a
 collection of Rust code to test against the grammar. The command `git
