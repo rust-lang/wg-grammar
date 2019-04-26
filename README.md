@@ -37,6 +37,8 @@ collection of Rust code to test against the grammar. The command `git
 submodule update --init` may be used to fetch it. However, it is not necessary
 and you may run the tool against any collection of Rust code at your disposal.
 
+### Snapshot tests
+
 Additionaly, a number of [snapshot tests](https://docs.rs/insta/*/insta/#how-it-operates)
 are maintained in [testdata](testdata). These files are named according to the
 convention of `<production>.<test-name>.input`, and the parse forest that they
