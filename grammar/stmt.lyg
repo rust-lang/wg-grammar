@@ -5,4 +5,4 @@ Stmt =
   | Semi:";"
   ;
 
-Block = "{" attrs:InnerAttr* Stmt* "}";
+Block = "{" attrs:InnerAttr* stmts:Stmt* "}";
