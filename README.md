@@ -30,12 +30,27 @@ times faster. It supports several subcommands to point it at different files
 or directories to examine. For example, if you check out the submodule
 (explained below), you can run the tests with the following command:
 
-    cargo run --release -- dir external/rust/src
+    cargo run --bin coverage --release -- dir external/rust/src
 
 This repository includes a submodule to the main rust repo to use as a
 collection of Rust code to test against the grammar. The command `git
 submodule update --init` may be used to fetch it. However, it is not necessary
 and you may run the tool against any collection of Rust code at your disposal.
+
+### Snapshot tests
+
+Additionaly, a number of [snapshot tests](https://docs.rs/insta/*/insta/#how-it-operates)
+are maintained in [testdata](testdata). These files are named according to the
+convention of `<production>.<test-name>.input`, and the parse forest that they
+produce is tracked in [src/bin/snapshots](src/bin/snapshots). The tests are run with:
+
+    cargo run --bin snapshots --release
+
+A list of the tested productions is maintained in the test dispatcher,
+[snapshots.rs](src/bin/snapshots.rs). These tested productions are,
+to the best of the maintainers' ability, to be considered "complete"
+in terms of their structure, though the ability to remove trees from
+ambiguous forests is explicitly reserved (even when tested).
 
 ## Links
 

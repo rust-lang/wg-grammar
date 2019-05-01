@@ -1,0 +1,412 @@
+---
+created: "2019-04-25T18:00:11.412713700Z"
+creator: insta@0.7.4
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    _ => Expr {
+        attrs: _ => [],
+        kind: _ => ExprKind::Binary {
+            op: _ => BinaryOp::Mul(_),
+            left: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Literal(_)
+            },
+            right: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Add(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Div(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Sub(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            }
+                        } | ExprKind::Binary {
+                            op: _ => BinaryOp::Sub(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Div(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Div(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Add(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Sub(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Sub(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Add(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Div(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            }
+                        } | ExprKind::Binary {
+                            op: _ => BinaryOp::Div(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Add(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            }
+        } | ExprKind::Binary {
+            op: _ => BinaryOp::Add(_),
+            left: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Mul(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            },
+            right: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Div(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Sub(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Sub(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Div(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            }
+        } | ExprKind::Binary {
+            op: _ => BinaryOp::Div(_),
+            left: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Mul(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Add(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Add(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Mul(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            },
+            right: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Sub(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            }
+        } | ExprKind::Binary {
+            op: _ => BinaryOp::Sub(_),
+            left: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Binary {
+                    op: _ => BinaryOp::Mul(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Add(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Div(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            }
+                        } | ExprKind::Binary {
+                            op: _ => BinaryOp::Div(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Add(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Add(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Mul(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Div(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    }
+                } | ExprKind::Binary {
+                    op: _ => BinaryOp::Div(_),
+                    left: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Binary {
+                            op: _ => BinaryOp::Mul(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Add(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            }
+                        } | ExprKind::Binary {
+                            op: _ => BinaryOp::Add(_),
+                            left: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Binary {
+                                    op: _ => BinaryOp::Mul(_),
+                                    left: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    },
+                                    right: _ => Expr {
+                                        attrs: _ => [],
+                                        kind: _ => ExprKind::Literal(_)
+                                    }
+                                }
+                            },
+                            right: _ => Expr {
+                                attrs: _ => [],
+                                kind: _ => ExprKind::Literal(_)
+                            }
+                        }
+                    },
+                    right: _ => Expr {
+                        attrs: _ => [],
+                        kind: _ => ExprKind::Literal(_)
+                    }
+                }
+            },
+            right: _ => Expr {
+                attrs: _ => [],
+                kind: _ => ExprKind::Literal(_)
+            }
+        }
+    }
+)

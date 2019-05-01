@@ -1,0 +1,113 @@
+---
+created: "2019-04-26T02:30:09.035774600Z"
+creator: insta@0.7.4
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    _ => ModuleContents {
+        attrs: _ => [],
+        items: _ => [
+            _ => Item {
+                attrs: _ => [],
+                kind: _ => ItemKind::Fn {
+                    header: _ => FnHeader,
+                    decl: _ => FnDecl {
+                        name: _
+                    },
+                    body: _ => Block {
+                        attrs: _ => [],
+                        stmts: _ => [
+                            _ => Stmt::Expr(
+                                _ => Expr {
+                                    attrs: _ => [],
+                                    kind: _ => ExprKind::Path(
+                                        _ => QPath::Unqualified(
+                                            _ => Path {
+                                                path: _ => RelativePath {
+                                                    segments: _ => [
+                                                        _ => PathSegment {
+                                                            ident: _
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        )
+                                    )
+                                }
+                            ),
+                            _ => Stmt::Expr(
+                                _ => Expr {
+                                    attrs: _ => [],
+                                    kind: _ => ExprKind::Unary {
+                                        expr: _ => Expr {
+                                            attrs: _ => [],
+                                            kind: _ => ExprKind::Paren {
+                                                attrs: _ => [],
+                                                expr: _ => Expr {
+                                                    attrs: _ => [],
+                                                    kind: _ => ExprKind::Literal(_)
+                                                }
+                                            } | ExprKind::Tuple {
+                                                attrs: _ => [],
+                                                exprs: _ => [
+                                                    _ => Expr {
+                                                        attrs: _ => [],
+                                                        kind: _ => ExprKind::Literal(_)
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        op: _ => UnaryOp::Not(_)
+                                    }
+                                }
+                            ),
+                            _ => Stmt::Semi(_)
+                        ] | [
+                            _ => Stmt::Expr(
+                                _ => Expr {
+                                    attrs: _ => [],
+                                    kind: _ => ExprKind::MacroCall(
+                                        _ => MacroCall {
+                                            path: _ => Path {
+                                                path: _ => RelativePath {
+                                                    segments: _ => [
+                                                        _ => PathSegment {
+                                                            ident: _
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            input: _
+                                        }
+                                    )
+                                }
+                            ),
+                            _ => Stmt::Semi(_)
+                        ] | [
+                            _ => Stmt::Item(
+                                _ => Item {
+                                    attrs: _ => [],
+                                    kind: _ => ItemKind::MacroCall(
+                                        _ => ItemMacroCall {
+                                            path: _ => Path {
+                                                path: _ => RelativePath {
+                                                    segments: _ => [
+                                                        _ => PathSegment {
+                                                            ident: _
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            input: _
+                                        }
+                                    )
+                                }
+                            )
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+)

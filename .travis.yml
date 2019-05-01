@@ -8,4 +8,5 @@ rust:
   - stable
 script:
   - cargo check
-  - cargo run --release -- dir external/rust/src
+  - cargo run --bin coverage --release -- dir external/rust/src
+  - cargo run --bin snapshots --release
