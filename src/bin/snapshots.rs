@@ -1,17 +1,9 @@
-extern crate crossbeam;
-extern crate gll;
-extern crate insta;
-extern crate proc_macro2;
-extern crate rayon;
-extern crate rust_grammar;
-extern crate walkdir;
-extern crate regex;
-extern crate lazy_static;
+#![deny(rust_2018_idioms)]
 
 use {
+    std::{fmt::Debug, fs, process::exit},
     insta::assert_snapshot_matches,
     rust_grammar::parse,
-    std::{fmt::Debug, fs, process::exit},
     walkdir::WalkDir,
     regex::Regex,
     lazy_static::lazy_static,
@@ -86,7 +78,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
 }
 
 fn spawn_panicking(stack_size: usize, f: impl FnOnce() + Send + 'static) -> Result<(), ()> {
-    crossbeam::scope(|scope: &crossbeam::thread::Scope| {
+    crossbeam::scope(|scope: &crossbeam::thread::Scope<'_>| {
         scope
             .builder()
             .stack_size(stack_size) // 32 MiB

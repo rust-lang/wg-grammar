@@ -1,9 +1,7 @@
-extern crate gll;
-extern crate walkdir;
+#![deny(rust_2018_idioms)]
 
-use std::env;
-use std::fs;
-use std::path::PathBuf;
+use std::{env, fs, path::PathBuf};
+
 use walkdir::WalkDir;
 
 fn main() {
