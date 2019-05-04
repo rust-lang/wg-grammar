@@ -40,7 +40,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
     let path = file.path();
     let file_name = file.file_name().to_str().unwrap();
     let src = fs::read_to_string(path).unwrap();
-    let production = &file_name[..file_name.find('.').unwrap_or(file_name.len())];
+    let production = &file_name[..file_name.find('.').unwrap_or_else(|| file_name.len())];
     let forest = dispatch! { src, production;
         // abi.lyg
         Abi
@@ -95,7 +95,7 @@ fn main() {
     let files = WalkDir::new("testdata")
         .contents_first(true)
         .into_iter()
-        .map(|entry| entry.unwrap())
+        .map(Result::unwrap)
         .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "input"));
 
     // Parse and snapshot each file
@@ -106,7 +106,7 @@ fn main() {
     // Collect failures
     let failures: Vec<_> = snapshots.filter_map(Result::err).collect();
 
-    if failures.len() == 0 {
+    if failures.is_empty() {
         println!("All snapshots passed!");
     } else {
         exit(1);

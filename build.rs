@@ -7,6 +7,7 @@ use walkdir::WalkDir;
 fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
+
     // FIXME(eddyb) streamline this process in `gll`.
 
     // Find all the `.lyg` grammar fragments in `grammar/`.

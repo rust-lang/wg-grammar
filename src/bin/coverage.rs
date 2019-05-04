@@ -199,7 +199,7 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     let mut stdout = io::stdout();
     let path = file.into_path();
 
-    let out = parse_file_with(&path, |result| {
+    parse_file_with(&path, |result| {
         let mut ambiguity_result = Ok(());
         let start = Instant::now();
         let status = match result {
@@ -222,13 +222,11 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
             stdout.flush().unwrap();
         }
         status
-    });
-
-    out
+    })
 }
 
 fn print_statistics(counters: Counters) {
-    println!("");
+    println!();
     println!("Out of {} Rust files tested:", counters.total_count);
     println!(
         "* {} parsed fully and unambiguously",
@@ -281,7 +279,7 @@ fn main() -> Result<(), failure::Error> {
             let files = WalkDir::new(dir)
                 .contents_first(true)
                 .into_iter()
-                .map(|entry| entry.unwrap())
+                .map(Result::unwrap)
                 .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"))
                 .filter(|entry| !config.blacklist.is_blacklisted(entry.path()));
 
@@ -291,7 +289,7 @@ fn main() -> Result<(), failure::Error> {
                 .par_bridge()
                 .map(|f| process(f, verbose))
                 .fold(
-                    || Counters::default(),
+                    Counters::default,
                     |mut acc, x| {
                         acc.total_count += 1;
                         match x {
@@ -311,7 +309,7 @@ fn main() -> Result<(), failure::Error> {
                         acc
                     },
                 )
-                .reduce(|| Counters::default(), |a, b| a + b);
+                .reduce(Counters::default, |a, b| a + b);
 
             // We're done, time to print out stats!
             print_statistics(counters);
