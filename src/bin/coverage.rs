@@ -1,26 +1,18 @@
-extern crate gll;
-extern crate proc_macro2;
-extern crate rayon;
-extern crate rust_grammar;
-extern crate structopt;
-extern crate walkdir;
-#[macro_use]
-extern crate derive_more;
-#[macro_use]
-extern crate serde_derive;
-extern crate toml;
+#![deny(rust_2018_idioms)]
 
+use std::{
+    collections::{BTreeSet, VecDeque},
+    fs, io, io::prelude::*,
+    path::{Path, PathBuf},
+    time::{Duration, Instant},
+};
 use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
 use rayon::prelude::*;
 use rust_grammar::parse;
-use std::collections::{BTreeSet, VecDeque};
-use std::fs;
-use std::io;
-use std::io::prelude::*;
-use std::path::{Path, PathBuf};
-use std::time::{Duration, Instant};
 use structopt::StructOpt;
 use walkdir::WalkDir;
+use derive_more::Add;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 struct Blacklist {
@@ -41,7 +33,7 @@ struct Config {
 impl Config {
     fn load() -> Result<Config, failure::Error> {
         let config = match fs::read_to_string("wg-grammar.toml") {
-            Ok(mut toml) => toml::from_str(&toml)?,
+            Ok(toml) => toml::from_str(&toml)?,
             Err(_) => Config::default(),
         };
         Ok(config)
@@ -91,7 +83,7 @@ type ModuleContentsHandle<'a, 'i> = parse::Handle<
 
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
-fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult) -> R) -> R {
+fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) -> R) -> R {
     let src = fs::read_to_string(path).unwrap();
     match src.parse::<proc_macro2::TokenStream>() {
         Ok(tts) => parse::ModuleContents::parse_with(tts, |_, result| f(result)),
@@ -104,7 +96,7 @@ fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult) -> R) ->
 /// optionally prefixed by a given `path`.
 fn report_file_result(
     path: Option<&Path>,
-    result: ModuleContentsResult,
+    result: ModuleContentsResult<'_, '_>,
     ambiguity_result: Result<(), MoreThanOne>,
     duration: Option<Duration>,
 ) {
@@ -141,7 +133,7 @@ fn report_file_result(
     }
 }
 
-fn ambiguity_check(handle: ModuleContentsHandle) -> Result<(), MoreThanOne> {
+fn ambiguity_check(handle: ModuleContentsHandle<'_, '_>) -> Result<(), MoreThanOne> {
     let sppf = &handle.parser.sppf;
 
     let mut queue = VecDeque::new();
@@ -207,7 +199,7 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     let mut stdout = io::stdout();
     let path = file.into_path();
 
-    let out = parse_file_with(&path, |result| {
+    parse_file_with(&path, |result| {
         let mut ambiguity_result = Ok(());
         let start = Instant::now();
         let status = match result {
@@ -230,13 +222,11 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
             stdout.flush().unwrap();
         }
         status
-    });
-
-    out
+    })
 }
 
 fn print_statistics(counters: Counters) {
-    println!("");
+    println!();
     println!("Out of {} Rust files tested:", counters.total_count);
     println!(
         "* {} parsed fully and unambiguously",
@@ -289,17 +279,17 @@ fn main() -> Result<(), failure::Error> {
             let files = WalkDir::new(dir)
                 .contents_first(true)
                 .into_iter()
-                .map(|entry| entry.unwrap())
+                .map(Result::unwrap)
                 .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "rs"))
                 .filter(|entry| !config.blacklist.is_blacklisted(entry.path()));
 
             // Go through all the files and try to parse each of them.
 
-            let mut counters: Counters = files
+            let counters: Counters = files
                 .par_bridge()
                 .map(|f| process(f, verbose))
                 .fold(
-                    || Counters::default(),
+                    Counters::default,
                     |mut acc, x| {
                         acc.total_count += 1;
                         match x {
@@ -319,7 +309,7 @@ fn main() -> Result<(), failure::Error> {
                         acc
                     },
                 )
-                .reduce(|| Counters::default(), |a, b| a + b);
+                .reduce(Counters::default, |a, b| a + b);
 
             // We're done, time to print out stats!
             print_statistics(counters);

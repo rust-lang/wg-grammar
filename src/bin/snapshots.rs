@@ -1,17 +1,9 @@
-extern crate crossbeam;
-extern crate gll;
-extern crate insta;
-extern crate proc_macro2;
-extern crate rayon;
-extern crate rust_grammar;
-extern crate walkdir;
-extern crate regex;
-extern crate lazy_static;
+#![deny(rust_2018_idioms)]
 
 use {
+    std::{fmt::Debug, fs, process::exit},
     insta::assert_snapshot_matches,
     rust_grammar::parse,
-    std::{fmt::Debug, fs, process::exit},
     walkdir::WalkDir,
     regex::Regex,
     lazy_static::lazy_static,
@@ -48,7 +40,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
     let path = file.path();
     let file_name = file.file_name().to_str().unwrap();
     let src = fs::read_to_string(path).unwrap();
-    let production = &file_name[..file_name.find('.').unwrap_or(file_name.len())];
+    let production = &file_name[..file_name.find('.').unwrap_or_else(|| file_name.len())];
     let forest = dispatch! { src, production;
         // abi.lyg
         Abi
@@ -86,7 +78,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
 }
 
 fn spawn_panicking(stack_size: usize, f: impl FnOnce() + Send + 'static) -> Result<(), ()> {
-    crossbeam::scope(|scope: &crossbeam::thread::Scope| {
+    crossbeam::scope(|scope: &crossbeam::thread::Scope<'_>| {
         scope
             .builder()
             .stack_size(stack_size) // 32 MiB
@@ -103,7 +95,7 @@ fn main() {
     let files = WalkDir::new("testdata")
         .contents_first(true)
         .into_iter()
-        .map(|entry| entry.unwrap())
+        .map(Result::unwrap)
         .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "input"));
 
     // Parse and snapshot each file
@@ -114,7 +106,7 @@ fn main() {
     // Collect failures
     let failures: Vec<_> = snapshots.filter_map(Result::err).collect();
 
-    if failures.len() == 0 {
+    if failures.is_empty() {
         println!("All snapshots passed!");
     } else {
         exit(1);
