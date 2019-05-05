@@ -83,7 +83,7 @@ fn spawn_panicking(stack_size: usize, f: impl FnOnce() + Send + 'static) -> Resu
     crossbeam::scope(|scope: &crossbeam::thread::Scope<'_>| {
         scope
             .builder()
-            .stack_size(stack_size) // 32 MiB
+            .stack_size(stack_size)
             .spawn(|_| f())
             .unwrap()
             .join()
