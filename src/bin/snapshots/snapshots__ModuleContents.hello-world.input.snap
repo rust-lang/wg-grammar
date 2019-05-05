@@ -1,32 +1,32 @@
 ---
-created: "2019-04-26T02:30:09.035774600Z"
+created: "2019-05-05T19:54:12.487950400Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
 ---
 Ok(
-    _ => ModuleContents {
-        attrs: _ => [],
-        items: _ => [
-            _ => Item {
-                attrs: _ => [],
-                kind: _ => ItemKind::Fn {
-                    header: _ => FnHeader,
-                    decl: _ => FnDecl {
+    ModuleContents {
+        attrs: [],
+        items: [
+            Item {
+                attrs: [],
+                kind: ItemKind::Fn {
+                    header: FnHeader,
+                    decl: FnDecl {
                         name: _
                     },
-                    body: _ => Block {
-                        attrs: _ => [],
-                        stmts: _ => [
-                            _ => Stmt::Expr(
-                                _ => Expr {
-                                    attrs: _ => [],
-                                    kind: _ => ExprKind::Path(
-                                        _ => QPath::Unqualified(
-                                            _ => Path {
-                                                path: _ => RelativePath {
-                                                    segments: _ => [
-                                                        _ => PathSegment {
+                    body: Block {
+                        attrs: [],
+                        stmts: [
+                            Stmt::Expr(
+                                Expr {
+                                    attrs: [],
+                                    kind: ExprKind::Path(
+                                        QPath::Unqualified(
+                                            Path {
+                                                path: RelativePath {
+                                                    segments: [
+                                                        PathSegment {
                                                             ident: _
                                                         }
                                                     ]
@@ -36,43 +36,43 @@ Ok(
                                     )
                                 }
                             ),
-                            _ => Stmt::Expr(
-                                _ => Expr {
-                                    attrs: _ => [],
-                                    kind: _ => ExprKind::Unary {
-                                        expr: _ => Expr {
-                                            attrs: _ => [],
-                                            kind: _ => ExprKind::Paren {
-                                                attrs: _ => [],
-                                                expr: _ => Expr {
-                                                    attrs: _ => [],
-                                                    kind: _ => ExprKind::Literal(_)
+                            Stmt::Expr(
+                                Expr {
+                                    attrs: [],
+                                    kind: ExprKind::Unary {
+                                        expr: Expr {
+                                            attrs: [],
+                                            kind: ExprKind::Paren {
+                                                attrs: [],
+                                                expr: Expr {
+                                                    attrs: [],
+                                                    kind: ExprKind::Literal
                                                 }
                                             } | ExprKind::Tuple {
-                                                attrs: _ => [],
-                                                exprs: _ => [
-                                                    _ => Expr {
-                                                        attrs: _ => [],
-                                                        kind: _ => ExprKind::Literal(_)
+                                                attrs: [],
+                                                exprs: [
+                                                    Expr {
+                                                        attrs: [],
+                                                        kind: ExprKind::Literal
                                                     }
                                                 ]
                                             }
                                         },
-                                        op: _ => UnaryOp::Not(_)
+                                        op: UnaryOp::Not
                                     }
                                 }
                             ),
-                            _ => Stmt::Semi(_)
+                            Stmt::Semi
                         ] | [
-                            _ => Stmt::Expr(
-                                _ => Expr {
-                                    attrs: _ => [],
-                                    kind: _ => ExprKind::MacroCall(
-                                        _ => MacroCall {
-                                            path: _ => Path {
-                                                path: _ => RelativePath {
-                                                    segments: _ => [
-                                                        _ => PathSegment {
+                            Stmt::Expr(
+                                Expr {
+                                    attrs: [],
+                                    kind: ExprKind::MacroCall(
+                                        MacroCall {
+                                            path: Path {
+                                                path: RelativePath {
+                                                    segments: [
+                                                        PathSegment {
                                                             ident: _
                                                         }
                                                     ]
@@ -83,17 +83,17 @@ Ok(
                                     )
                                 }
                             ),
-                            _ => Stmt::Semi(_)
+                            Stmt::Semi
                         ] | [
-                            _ => Stmt::Item(
-                                _ => Item {
-                                    attrs: _ => [],
-                                    kind: _ => ItemKind::MacroCall(
-                                        _ => ItemMacroCall {
-                                            path: _ => Path {
-                                                path: _ => RelativePath {
-                                                    segments: _ => [
-                                                        _ => PathSegment {
+                            Stmt::Item(
+                                Item {
+                                    attrs: [],
+                                    kind: ItemKind::MacroCall(
+                                        ItemMacroCall {
+                                            path: Path {
+                                                path: RelativePath {
+                                                    segments: [
+                                                        PathSegment {
                                                             ident: _
                                                         }
                                                     ]
