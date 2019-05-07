@@ -16,9 +16,8 @@ fn to_debug_str(debug: &dyn Debug) -> String {
 macro_rules! snapshot {
     ($production:ident, $src:expr) => {
         match $src.parse::<proc_macro2::TokenStream>() {
-            Ok(tts) => parse::$production::parse_with(tts, |_, result| to_debug_str(&result)),
-            // FIXME(eddyb) provide more information in this error case.
-            Err(_) => to_debug_str(&Err::<(), _>(parse::ParseError::<()>::NoParse)),
+            Ok(tts) => to_debug_str(&parse::$production::parse(tts)),
+            Err(_) => panic!("Failed to tokenize"),
         }
     };
 }

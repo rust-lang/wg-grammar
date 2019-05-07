@@ -7,7 +7,6 @@ use walkdir::WalkDir;
 fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-
     // FIXME(eddyb) streamline this process in `gll`.
 
     // Find all the `.lyg` grammar fragments in `grammar/`.
@@ -49,5 +48,9 @@ fn main() {
     }
 
     // Generate a Rust parser from the combined grammar and write it out.
-    fs::write(&out_dir.join("parse.rs"), grammar.generate_rust()).unwrap();
+    fs::write(
+        &out_dir.join("parse.rs"),
+        grammar.generate_rust().to_rustfmt_or_pretty_string(),
+    )
+    .unwrap();
 }

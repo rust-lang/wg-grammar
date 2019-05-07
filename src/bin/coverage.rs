@@ -1,4 +1,5 @@
 #![deny(rust_2018_idioms)]
+#![allow(clippy::match_wild_err_arm)]
 
 use std::{
     collections::{BTreeSet, VecDeque},
@@ -67,11 +68,9 @@ enum Command {
     },
 }
 
-type ModuleContentsResult<'a, 'i> = parse::ParseResult<
-    'a,
-    'i,
-    proc_macro2::TokenStream,
-    parse::ModuleContents<'a, 'i, proc_macro2::TokenStream>,
+type ModuleContentsResult<'a, 'i> = Result<
+    ModuleContentsHandle<'a, 'i>,
+    gll::runtime::ParseError<proc_macro2::Span, std::ops::Range<proc_macro2::Span>>
 >;
 
 type ModuleContentsHandle<'a, 'i> = parse::Handle<
@@ -81,14 +80,23 @@ type ModuleContentsHandle<'a, 'i> = parse::Handle<
     parse::ModuleContents<'a, 'i, proc_macro2::TokenStream>,
 >;
 
+type ParseFileResult<'a, 'i> = Result<
+    ModuleContentsResult<'a, 'i>,
+    proc_macro2::LexError,
+>;
+
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
-fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) -> R) -> R {
+fn parse_file_with<R>(path: &Path, f: impl FnOnce(ParseFileResult<'_, '_>) -> R) -> R {
     let src = fs::read_to_string(path).unwrap();
     match src.parse::<proc_macro2::TokenStream>() {
-        Ok(tts) => parse::ModuleContents::parse_with(tts, |_, result| f(result)),
-        // FIXME(eddyb) provide more information in this error case.
-        Err(_) => f(Err(parse::ParseError::NoParse)),
+        Ok(tts) => {
+            match parse::ModuleContents::parse(tts) {
+                Ok(module) => module.with(|handle| f(Ok(Ok(handle)))),
+                Err(e) => f(Ok(Err(e)))
+            }
+        },
+        Err(e) => f(Err(e))
     }
 }
 
@@ -96,7 +104,7 @@ fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) 
 /// optionally prefixed by a given `path`.
 fn report_file_result(
     path: Option<&Path>,
-    result: ModuleContentsResult<'_, '_>,
+    result: ParseFileResult<'_, '_>,
     ambiguity_result: Result<(), MoreThanOne>,
     duration: Option<Duration>,
 ) {
@@ -109,32 +117,27 @@ fn report_file_result(
     }
     // Avoid printing too much, especially not any parse nodes.
     match (result, ambiguity_result) {
-        (Ok(_), Ok(_)) => eprintln!("OK"),
-        (Ok(_), Err(_)) => eprintln!("OK (ambiguous)"),
-        (Err(parse::ParseError::TooShort(handle)), _) => {
+        (Ok(Ok(_)), Ok(_)) => eprintln!("OK"),
+        (Ok(Ok(_)), Err(_)) => eprintln!("OK (ambiguous)"),
+        (Ok(Err(handle)), _) => {
             eprint!("FAIL after ");
 
-            #[cfg(procmacro2_semver_exempt)]
-            {
-                // HACK(eddyb) work around `proc-macro2` `Span` printing limitation
-                let end_location = handle.source_info().end.end();
-                eprintln!("{}:{}", end_location.line, end_location.column);
-            }
+            eprintln!("{:?}", handle.at);
+
             #[cfg(not(procmacro2_semver_exempt))]
             {
-                let _ = handle;
                 eprintln!(
                     "(missing location information; \
                      set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
                 );
             }
         }
-        (Err(parse::ParseError::NoParse), _) => eprintln!("FAIL (lexer error?)"),
+        (Err(e), _) => eprintln!("FAIL ({:?})", e),
     }
 }
 
 fn ambiguity_check(handle: ModuleContentsHandle<'_, '_>) -> Result<(), MoreThanOne> {
-    let sppf = &handle.parser.sppf;
+    let sppf = &handle.forest;
 
     let mut queue = VecDeque::new();
     queue.push_back(handle.node);
@@ -203,7 +206,7 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
         let mut ambiguity_result = Ok(());
         let start = Instant::now();
         let status = match result {
-            Ok(handle) => {
+            Ok(Ok(handle)) => {
                 ambiguity_result = ambiguity_check(handle);
                 if ambiguity_result.is_ok() {
                     ParseResult::Unambiguous
@@ -211,8 +214,8 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
                     ParseResult::Ambiguous
                 }
             }
-            Err(parse::ParseError::TooShort(_)) => ParseResult::Partial,
-            Err(parse::ParseError::NoParse) => ParseResult::Error,
+            Ok(Err(_)) => ParseResult::Partial,
+            Err(_) => ParseResult::Error,
         };
         let duration = start.elapsed();
         if verbose {
@@ -255,19 +258,15 @@ fn main() -> Result<(), failure::Error> {
             // Not much to do, try to parse the file and report the result.
             parse_file_with(&file, |result| {
                 let mut ambiguity_result = Ok(());
-                match result {
-                    Ok(handle) | Err(parse::ParseError::TooShort(handle)) => {
-                        ambiguity_result = ambiguity_check(handle);
+                if let Ok(Ok(handle)) = result {
+                    ambiguity_result = ambiguity_check(handle);
 
-                        if let Some(out_path) = graphviz_forest {
-                            handle
-                                .parser
-                                .sppf
-                                .dump_graphviz(&mut fs::File::create(out_path).unwrap())
-                                .unwrap();
-                        }
+                    if let Some(out_path) = graphviz_forest {
+                        handle
+                            .forest
+                            .dump_graphviz(&mut fs::File::create(out_path).unwrap())
+                            .unwrap();
                     }
-                    Err(parse::ParseError::NoParse) => {}
                 }
                 report_file_result(None, result, ambiguity_result, None);
             });
