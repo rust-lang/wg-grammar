@@ -119,10 +119,11 @@ fn report_file_result(
     match (result, ambiguity_result) {
         (Ok(Ok(_)), Ok(_)) => eprintln!("OK"),
         (Ok(Ok(_)), Err(_)) => eprintln!("OK (ambiguous)"),
-        (Ok(Err(handle)), _) => {
+        (Ok(Err(error)), _) => {
             eprint!("FAIL after ");
 
-            eprintln!("{:?}", handle.at);
+            eprintln!("At {:?},", error.at);
+            eprintln!("Expected: {:?}", error.expected);
 
             #[cfg(not(procmacro2_semver_exempt))]
             {

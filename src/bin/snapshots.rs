@@ -1,4 +1,5 @@
 #![deny(rust_2018_idioms)]
+#![allow(clippy::match_wild_err_arm)]
 
 use {
     std::{fmt::Debug, fs, process::exit},
