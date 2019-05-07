@@ -70,7 +70,8 @@ enum Command {
 
 type ModuleContentsResult<'a, 'i> = Result<
     ModuleContentsHandle<'a, 'i>,
-    gll::runtime::ParseError<proc_macro2::Span, std::ops::Range<proc_macro2::Span>>
+    Error<proc_macro2::Span, std::ops::Range<proc_macro2::Span>>,
+    // gll::runtime::ParseError<TokenStream::SourceInfoPoint, TokenStream::SourceInfo>
 >;
 
 type ModuleContentsHandle<'a, 'i> = parse::Handle<
@@ -80,23 +81,23 @@ type ModuleContentsHandle<'a, 'i> = parse::Handle<
     parse::ModuleContents<'a, 'i, proc_macro2::TokenStream>,
 >;
 
-type ParseFileResult<'a, 'i> = Result<
-    ModuleContentsResult<'a, 'i>,
-    proc_macro2::LexError,
->;
+enum Error<A, T> {
+    Lex(proc_macro2::LexError),
+    Parse(gll::runtime::ParseError<A, T>),
+}
 
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
-fn parse_file_with<R>(path: &Path, f: impl FnOnce(ParseFileResult<'_, '_>) -> R) -> R {
+fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) -> R) -> R {
     let src = fs::read_to_string(path).unwrap();
     match src.parse::<proc_macro2::TokenStream>() {
         Ok(tts) => {
             match parse::ModuleContents::parse(tts) {
-                Ok(module) => module.with(|handle| f(Ok(Ok(handle)))),
-                Err(e) => f(Ok(Err(e)))
+                Ok(module) => module.with(|handle| f(Ok(handle))),
+                Err(e) => f(Err(Error::Parse(e)))
             }
         },
-        Err(e) => f(Err(e))
+        Err(e) => f(Err(Error::Lex(e)))
     }
 }
 
@@ -104,7 +105,7 @@ fn parse_file_with<R>(path: &Path, f: impl FnOnce(ParseFileResult<'_, '_>) -> R)
 /// optionally prefixed by a given `path`.
 fn report_file_result(
     path: Option<&Path>,
-    result: ParseFileResult<'_, '_>,
+    result: ModuleContentsResult<'_, '_>,
     ambiguity_result: Result<(), MoreThanOne>,
     duration: Option<Duration>,
 ) {
@@ -117,9 +118,9 @@ fn report_file_result(
     }
     // Avoid printing too much, especially not any parse nodes.
     match (result, ambiguity_result) {
-        (Ok(Ok(_)), Ok(_)) => eprintln!("OK"),
-        (Ok(Ok(_)), Err(_)) => eprintln!("OK (ambiguous)"),
-        (Ok(Err(error)), _) => {
+        (Ok(_), Ok(_)) => eprintln!("OK"),
+        (Ok(_), Err(_)) => eprintln!("OK (ambiguous)"),
+        (Err(Error::Parse(error)), _) => {
             eprint!("FAIL after ");
 
             eprintln!("At {:?},", error.at);
@@ -133,7 +134,7 @@ fn report_file_result(
                 );
             }
         }
-        (Err(e), _) => eprintln!("FAIL ({:?})", e),
+        (Err(Error::Lex(e)), _) => eprintln!("FAIL ({:?})", e),
     }
 }
 
@@ -207,7 +208,7 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
         let mut ambiguity_result = Ok(());
         let start = Instant::now();
         let status = match result {
-            Ok(Ok(handle)) => {
+            Ok(handle) => {
                 ambiguity_result = ambiguity_check(handle);
                 if ambiguity_result.is_ok() {
                     ParseResult::Unambiguous
@@ -215,8 +216,8 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
                     ParseResult::Ambiguous
                 }
             }
-            Ok(Err(_)) => ParseResult::Partial,
-            Err(_) => ParseResult::Error,
+            Err(Error::Parse(_))=> ParseResult::Partial,
+            Err(Error::Lex(_)) => ParseResult::Error,
         };
         let duration = start.elapsed();
         if verbose {
@@ -259,7 +260,7 @@ fn main() -> Result<(), failure::Error> {
             // Not much to do, try to parse the file and report the result.
             parse_file_with(&file, |result| {
                 let mut ambiguity_result = Ok(());
-                if let Ok(Ok(handle)) = result {
+                if let Ok(handle) = result {
                     ambiguity_result = ambiguity_check(handle);
 
                     if let Some(out_path) = graphviz_forest {
