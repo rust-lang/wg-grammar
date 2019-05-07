@@ -123,9 +123,12 @@ fn report_file_result(
         (Err(Error::Parse(error)), _) => {
             eprint!("FAIL after ");
 
-            eprintln!("At {:?},", error.at);
-            eprintln!("Expected: {:?}", error.expected);
-
+            #[cfg(procmacro2_semver_exempt)]
+            {
+                // HACK(eddyb) work around `proc-macro2` `Span` printing limitation
+                let end_location = error.at.end();
+                eprintln!("{}:{}", end_location.line, end_location.column);
+            }
             #[cfg(not(procmacro2_semver_exempt))]
             {
                 eprintln!(
@@ -133,6 +136,7 @@ fn report_file_result(
                      set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
                 );
             }
+            eprintln!("Expected: {:?}", error.expected);
         }
         (Err(Error::Lex(e)), _) => eprintln!("FAIL ({:?})", e),
     }
