@@ -3,17 +3,19 @@
 
 use std::{
     collections::{BTreeSet, VecDeque},
-    fs, io, io::prelude::*,
+    fs, io,
+    io::prelude::*,
     path::{Path, PathBuf},
     time::{Duration, Instant},
 };
+
+use derive_more::Add;
 use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
 use rayon::prelude::*;
 use rust_grammar::parse;
+use serde::{Deserialize, Serialize};
 use structopt::StructOpt;
 use walkdir::WalkDir;
-use derive_more::Add;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 struct Blacklist {
@@ -283,27 +285,24 @@ fn main() -> Result<(), failure::Error> {
             let counters: Counters = files
                 .par_bridge()
                 .map(|f| process(f, verbose))
-                .fold(
-                    Counters::default,
-                    |mut acc, x| {
-                        acc.total_count += 1;
-                        match x {
-                            ParseResult::Ambiguous => {
-                                acc.ambiguous_count += 1;
-                            }
-                            ParseResult::Unambiguous => {
-                                acc.unambiguous_count += 1;
-                            }
-                            ParseResult::Partial => {
-                                acc.too_short_count += 1;
-                            }
-                            ParseResult::Error => {
-                                acc.no_parse_count += 1;
-                            }
-                        };
-                        acc
-                    },
-                )
+                .fold(Counters::default, |mut acc, x| {
+                    acc.total_count += 1;
+                    match x {
+                        ParseResult::Ambiguous => {
+                            acc.ambiguous_count += 1;
+                        }
+                        ParseResult::Unambiguous => {
+                            acc.unambiguous_count += 1;
+                        }
+                        ParseResult::Partial => {
+                            acc.too_short_count += 1;
+                        }
+                        ParseResult::Error => {
+                            acc.no_parse_count += 1;
+                        }
+                    };
+                    acc
+                })
                 .reduce(Counters::default, |a, b| a + b);
 
             // We're done, time to print out stats!
