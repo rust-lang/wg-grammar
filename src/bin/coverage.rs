@@ -68,16 +68,14 @@ enum Command {
     },
 }
 
-type ModuleContentsResult<'a, 'i> = Result<
-    ModuleContentsHandle<'a, 'i>,
+type ModuleContentsResult = Result<
+    ModuleContentsHandle,
     Error<proc_macro2::Span>,
 >;
 
-type ModuleContentsHandle<'a, 'i> = parse::Handle<
-    'a,
-    'i,
+type ModuleContentsHandle = parse::OwnedHandle<
     proc_macro2::TokenStream,
-    parse::ModuleContents<'a, 'i, proc_macro2::TokenStream>,
+    parse::ModuleContents<'static, 'static, proc_macro2::TokenStream>,
 >;
 
 enum Error<A> {
@@ -87,12 +85,12 @@ enum Error<A> {
 
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
-fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) -> R) -> R {
+fn parse_file<R>(path: &Path, f: impl FnOnce(ModuleContentsResult) -> R) -> R {
     let src = fs::read_to_string(path).unwrap();
     match src.parse::<proc_macro2::TokenStream>() {
         Ok(tts) => {
             match parse::ModuleContents::parse(tts) {
-                Ok(module) => module.with(|handle| f(Ok(handle))),
+                Ok(module) => f(Ok(module)),
                 Err(e) => f(Err(Error::Parse(e)))
             }
         },
@@ -104,7 +102,7 @@ fn parse_file_with<R>(path: &Path, f: impl FnOnce(ModuleContentsResult<'_, '_>) 
 /// optionally prefixed by a given `path`.
 fn report_file_result(
     path: Option<&Path>,
-    result: ModuleContentsResult<'_, '_>,
+    result: &ModuleContentsResult,
     ambiguity_result: Result<(), MoreThanOne>,
     duration: Option<Duration>,
 ) {
@@ -141,38 +139,40 @@ fn report_file_result(
     }
 }
 
-fn ambiguity_check(handle: ModuleContentsHandle<'_, '_>) -> Result<(), MoreThanOne> {
-    let sppf = &handle.forest;
+fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
+    handle.with(|handle| {
+        let sppf = &handle.forest;
 
-    let mut queue = VecDeque::new();
-    queue.push_back(handle.node);
-    let mut seen: BTreeSet<_> = queue.iter().cloned().collect();
+        let mut queue = VecDeque::new();
+        queue.push_back(handle.node);
+        let mut seen: BTreeSet<_> = queue.iter().cloned().collect();
 
-    while let Some(source) = queue.pop_front() {
-        let mut add_children = |children: &[_]| {
-            for &child in children {
-                if seen.insert(child) {
-                    queue.push_back(child);
+        while let Some(source) = queue.pop_front() {
+            let mut add_children = |children: &[_]| {
+                for &child in children {
+                    if seen.insert(child) {
+                        queue.push_back(child);
+                    }
                 }
-            }
-        };
-        match source.kind.shape() {
-            ParseNodeShape::Opaque => {}
-            ParseNodeShape::Alias(_) => add_children(&[source.unpack_alias()]),
-            ParseNodeShape::Opt(_) => {
-                if let Some(child) = source.unpack_opt() {
-                    add_children(&[child]);
+            };
+            match source.kind.shape() {
+                ParseNodeShape::Opaque => {}
+                ParseNodeShape::Alias(_) => add_children(&[source.unpack_alias()]),
+                ParseNodeShape::Opt(_) => {
+                    if let Some(child) = source.unpack_opt() {
+                        add_children(&[child]);
+                    }
                 }
-            }
-            ParseNodeShape::Choice => add_children(&[sppf.one_choice(source)?]),
-            ParseNodeShape::Split(..) => {
-                let (left, right) = sppf.one_split(source)?;
-                add_children(&[left, right])
+                ParseNodeShape::Choice => add_children(&[sppf.one_choice(source)?]),
+                ParseNodeShape::Split(..) => {
+                    let (left, right) = sppf.one_split(source)?;
+                    add_children(&[left, right])
+                }
             }
         }
-    }
 
-    Ok(())
+        Ok(())
+    })
 }
 
 #[derive(Debug, Default, Add)]
@@ -207,10 +207,10 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     let mut stdout = io::stdout();
     let path = file.into_path();
 
-    parse_file_with(&path, |result| {
+    parse_file(&path, |result| {
         let mut ambiguity_result = Ok(());
         let start = Instant::now();
-        let status = match result {
+        let status = match &result {
             Ok(handle) => {
                 ambiguity_result = ambiguity_check(handle);
                 if ambiguity_result.is_ok() {
@@ -224,7 +224,7 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
         };
         let duration = start.elapsed();
         if verbose {
-            report_file_result(Some(&path), result, ambiguity_result, Some(duration));
+            report_file_result(Some(&path), &result, ambiguity_result, Some(duration));
         } else {
             print!("{}", status.compact_display());
             stdout.flush().unwrap();
@@ -261,19 +261,21 @@ fn main() -> Result<(), failure::Error> {
             file,
         } => {
             // Not much to do, try to parse the file and report the result.
-            parse_file_with(&file, |result| {
+            parse_file(&file, |result| {
                 let mut ambiguity_result = Ok(());
-                if let Ok(handle) = result {
+                if let Ok(handle) = &result {
                     ambiguity_result = ambiguity_check(handle);
 
                     if let Some(out_path) = graphviz_forest {
-                        handle
-                            .forest
-                            .dump_graphviz(&mut fs::File::create(out_path).unwrap())
-                            .unwrap();
+                        handle.with(|handle| {
+                            handle
+                                .forest
+                                .dump_graphviz(&mut fs::File::create(out_path).unwrap())
+                                .unwrap();
+                        })
                     }
                 }
-                report_file_result(None, result, ambiguity_result, None);
+                report_file_result(None, &result, ambiguity_result, None);
             });
         }
         Command::Dir { verbose, dir } => {
