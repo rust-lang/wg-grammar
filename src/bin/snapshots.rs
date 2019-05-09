@@ -2,12 +2,12 @@
 #![allow(clippy::match_wild_err_arm)]
 
 use {
-    std::{fmt::Debug, fs, process::exit},
     insta::assert_snapshot_matches,
-    rust_grammar::parse,
-    walkdir::WalkDir,
-    regex::Regex,
     lazy_static::lazy_static,
+    regex::Regex,
+    rust_grammar::parse,
+    std::{fmt::Debug, fs, process::exit},
+    walkdir::WalkDir,
 };
 
 fn to_debug_str(debug: &dyn Debug) -> String {
@@ -72,9 +72,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
         // vis.lyg
         Vis VisRestriction
     };
-    let forest = forest
-        .replace("Span..Span", "_")
-        .replace("_ => ", "");
+    let forest = forest.replace("Span..Span", "_").replace("_ => ", "");
     let forest = RE.replace_all(&forest, "");
     assert_snapshot_matches!(file_name, forest);
 }

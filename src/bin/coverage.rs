@@ -68,10 +68,7 @@ enum Command {
     },
 }
 
-type ModuleContentsResult = Result<
-    ModuleContentsHandle,
-    Error<proc_macro2::Span>,
->;
+type ModuleContentsResult = Result<ModuleContentsHandle, Error<proc_macro2::Span>>;
 
 type ModuleContentsHandle = parse::OwnedHandle<
     proc_macro2::TokenStream,
@@ -85,17 +82,11 @@ enum Error<A> {
 
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
-fn parse_file<R>(path: &Path, f: impl FnOnce(ModuleContentsResult) -> R) -> R {
+fn parse_file(path: &Path) -> ModuleContentsResult {
     let src = fs::read_to_string(path).unwrap();
-    match src.parse::<proc_macro2::TokenStream>() {
-        Ok(tts) => {
-            match parse::ModuleContents::parse(tts) {
-                Ok(module) => f(Ok(module)),
-                Err(e) => f(Err(Error::Parse(e)))
-            }
-        },
-        Err(e) => f(Err(Error::Lex(e)))
-    }
+    src.parse::<proc_macro2::TokenStream>()
+        .map_err(Error::Lex)
+        .and_then(|tts| parse::ModuleContents::parse(tts).map_err(Error::Parse))
 }
 
 /// Output the result of a single file to stderr,
@@ -207,30 +198,29 @@ fn process(file: walkdir::DirEntry, verbose: bool) -> ParseResult {
     let mut stdout = io::stdout();
     let path = file.into_path();
 
-    parse_file(&path, |result| {
-        let mut ambiguity_result = Ok(());
-        let start = Instant::now();
-        let status = match &result {
-            Ok(handle) => {
-                ambiguity_result = ambiguity_check(handle);
-                if ambiguity_result.is_ok() {
-                    ParseResult::Unambiguous
-                } else {
-                    ParseResult::Ambiguous
-                }
+    let result = parse_file(&path);
+    let mut ambiguity_result = Ok(());
+    let start = Instant::now();
+    let status = match &result {
+        Ok(handle) => {
+            ambiguity_result = ambiguity_check(handle);
+            if ambiguity_result.is_ok() {
+                ParseResult::Unambiguous
+            } else {
+                ParseResult::Ambiguous
             }
-            Err(Error::Parse(_))=> ParseResult::Partial,
-            Err(Error::Lex(_)) => ParseResult::Error,
-        };
-        let duration = start.elapsed();
-        if verbose {
-            report_file_result(Some(&path), &result, ambiguity_result, Some(duration));
-        } else {
-            print!("{}", status.compact_display());
-            stdout.flush().unwrap();
         }
-        status
-    })
+        Err(Error::Parse(_)) => ParseResult::Partial,
+        Err(Error::Lex(_)) => ParseResult::Error,
+    };
+    let duration = start.elapsed();
+    if verbose {
+        report_file_result(Some(&path), &result, ambiguity_result, Some(duration));
+    } else {
+        print!("{}", status.compact_display());
+        stdout.flush().unwrap();
+    }
+    status
 }
 
 fn print_statistics(counters: Counters) {
@@ -261,22 +251,21 @@ fn main() -> Result<(), failure::Error> {
             file,
         } => {
             // Not much to do, try to parse the file and report the result.
-            parse_file(&file, |result| {
-                let mut ambiguity_result = Ok(());
-                if let Ok(handle) = &result {
-                    ambiguity_result = ambiguity_check(handle);
+            let result = parse_file(&file);
+            let mut ambiguity_result = Ok(());
+            if let Ok(handle) = &result {
+                ambiguity_result = ambiguity_check(handle);
 
-                    if let Some(out_path) = graphviz_forest {
-                        handle.with(|handle| {
-                            handle
-                                .forest
-                                .dump_graphviz(&mut fs::File::create(out_path).unwrap())
-                                .unwrap();
-                        })
-                    }
+                if let Some(out_path) = graphviz_forest {
+                    handle.with(|handle| {
+                        handle
+                            .forest
+                            .dump_graphviz(&mut fs::File::create(out_path).unwrap())
+                            .unwrap();
+                    })
                 }
-                report_file_result(None, &result, ambiguity_result, None);
-            });
+            }
+            report_file_result(None, &result, ambiguity_result, None);
         }
         Command::Dir { verbose, dir } => {
             let config = Config::load()?;
