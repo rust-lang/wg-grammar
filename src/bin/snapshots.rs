@@ -1,5 +1,4 @@
 #![deny(rust_2018_idioms)]
-#![allow(clippy::match_wild_err_arm)]
 
 use {
     insta::assert_snapshot_matches,
@@ -15,12 +14,10 @@ fn to_debug_str(debug: &dyn Debug) -> String {
 }
 
 macro_rules! snapshot {
-    ($production:ident, $src:expr) => {
-        match $src.parse::<proc_macro2::TokenStream>() {
-            Ok(tts) => to_debug_str(&parse::$production::parse(tts)),
-            Err(_) => panic!("Failed to tokenize"),
-        }
-    };
+    ($production:ident, $src:expr) => {{
+        let tts = $src.parse::<proc_macro2::TokenStream>().expect("tokenization");
+        to_debug_str(&parse::$production::parse(tts))
+    }};
 }
 
 macro_rules! dispatch {

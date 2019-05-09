@@ -1,5 +1,4 @@
 #![deny(rust_2018_idioms)]
-#![allow(clippy::match_wild_err_arm)]
 
 use std::{
     collections::{BTreeSet, VecDeque},
