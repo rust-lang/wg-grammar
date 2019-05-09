@@ -33,4 +33,4 @@ name = "snapshots"
 path = "src/bin/snapshots.rs"
 
 [patch.'crates-io']
-gll = { git = "https://github.com/rust-lang/gll", rev = "13e7f22584163169afd08e6fa6a59d9da1cf58c7" }
+gll = { git = "https://github.com/rust-lang/gll", rev = "7c378f785d3886f95f5b4da040e137a018ebede4" }

@@ -70,8 +70,7 @@ enum Command {
 
 type ModuleContentsResult<'a, 'i> = Result<
     ModuleContentsHandle<'a, 'i>,
-    Error<proc_macro2::Span, std::ops::Range<proc_macro2::Span>>,
-    // gll::runtime::ParseError<TokenStream::SourceInfoPoint, TokenStream::SourceInfo>
+    Error<proc_macro2::Span>,
 >;
 
 type ModuleContentsHandle<'a, 'i> = parse::Handle<
@@ -81,9 +80,9 @@ type ModuleContentsHandle<'a, 'i> = parse::Handle<
     parse::ModuleContents<'a, 'i, proc_macro2::TokenStream>,
 >;
 
-enum Error<A, T> {
+enum Error<A> {
     Lex(proc_macro2::LexError),
-    Parse(gll::runtime::ParseError<A, T>),
+    Parse(gll::runtime::ParseError<A>),
 }
 
 /// Read the contents of the file at the given `path`, parse it
