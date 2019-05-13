@@ -145,7 +145,7 @@ fn report_file_result(
 
 fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
     handle.with(|handle| {
-        let sppf = &handle.forest;
+        let forest = &handle.forest;
 
         let mut queue = VecDeque::new();
         queue.push_back(handle.node);
@@ -167,9 +167,9 @@ fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
                         add_children(&[child]);
                     }
                 }
-                ParseNodeShape::Choice => add_children(&[sppf.one_choice(source)?]),
+                ParseNodeShape::Choice => add_children(&[forest.one_choice(source)?]),
                 ParseNodeShape::Split(..) => {
-                    let (left, right) = sppf.one_split(source)?;
+                    let (left, right) = forest.one_split(source)?;
                     add_children(&[left, right])
                 }
             }
