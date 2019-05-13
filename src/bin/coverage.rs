@@ -81,13 +81,25 @@ enum Error<A> {
     Parse(gll::runtime::ParseError<A>),
 }
 
+impl<A> From<proc_macro2::LexError> for Error<A> {
+    fn from(error: proc_macro2::LexError) -> Self {
+        Error::Lex(error)
+    }
+}
+
+impl<A> From<gll::runtime::ParseError<A>> for Error<A> {
+    fn from(error: gll::runtime::ParseError<A>) -> Self {
+        Error::Parse(error)
+    }
+}
+
 /// Read the contents of the file at the given `path`, parse it
 /// using the `ModuleContents` rule, and pass the result to `f`.
 fn parse_file(path: &Path) -> ModuleContentsResult {
     let src = fs::read_to_string(path).unwrap();
-    src.parse::<proc_macro2::TokenStream>()
-        .map_err(Error::Lex)
-        .and_then(|tts| parse::ModuleContents::parse(tts).map_err(Error::Parse))
+    let tts = src.parse::<proc_macro2::TokenStream>()?;
+    let res = parse::ModuleContents::parse(tts)?;
+    Ok(res)
 }
 
 /// Output the result of a single file to stderr,
