@@ -19,22 +19,6 @@ fn main() {
     // Start with the builtin rules for proc-macro grammars.
     let mut grammar = gll::proc_macro::builtin();
 
-    // HACK(eddyb) inject a custom builtin - this should be upstreamed to gll!
-    {
-        use gll::proc_macro::{FlatTokenPat, Pat};
-
-        grammar.define(
-            "LIFETIME",
-            gll::grammar::eat(Pat(vec![
-                FlatTokenPat::Punct {
-                    ch: Some('\''),
-                    joint: Some(true),
-                },
-                FlatTokenPat::Ident(None),
-            ])),
-        );
-    }
-
     // Add in each grammar fragment to the grammar.
     for fragment in fragments {
         let path = fragment.into_path();
@@ -43,14 +27,14 @@ fn main() {
         println!("cargo:rerun-if-changed={}", path.display());
 
         let src = fs::read_to_string(&path).unwrap();
-        let fragment: gll::grammar::Grammar<_> = src.parse().unwrap();
-        grammar.extend(fragment);
+        let fragment: gll::proc_macro::Grammar = src.parse().unwrap();
+        grammar.extend(fragment.0);
     }
 
     // Generate a Rust parser from the combined grammar and write it out.
     fs::write(
         &out_dir.join("parse.rs"),
-        grammar.generate_rust().to_rustfmt_or_pretty_string(),
+        gll::generate::rust::generate(&grammar).to_rustfmt_or_pretty_string(),
     )
     .unwrap();
 }

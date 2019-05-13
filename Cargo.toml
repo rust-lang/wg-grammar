@@ -33,4 +33,5 @@ name = "snapshots"
 path = "src/bin/snapshots.rs"
 
 [patch.'crates-io']
-gll = { git = "https://github.com/rust-lang/gll", rev = "7c378f785d3886f95f5b4da040e137a018ebede4" }
+gll = { git = "https://github.com/cad97/gll", rev = "a6caa18976239f9e259df9b33f9ce6fea8b7df7c" }
+grammer = { git = "https://github.com/lykenware/grammer", rev = "e108acbe83271761538bf5b2ff2daeaaafa5919c" }
