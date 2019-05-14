@@ -15,7 +15,9 @@ fn to_debug_str(debug: &dyn Debug) -> String {
 
 macro_rules! snapshot {
     ($production:ident, $src:expr) => {{
-        let tts = $src.parse::<proc_macro2::TokenStream>().expect("tokenization");
+        let tts = $src
+            .parse::<proc_macro2::TokenStream>()
+            .expect("tokenization");
         to_debug_str(&parse::$production::parse(tts))
     }};
 }
@@ -74,10 +76,15 @@ fn test_snapshot(file: walkdir::DirEntry) {
     assert_snapshot_matches!(file_name, forest);
 }
 
-fn spawn_panicking(stack_size: usize, f: impl FnOnce() + Send + 'static) -> Result<(), ()> {
+fn spawn_panicking(
+    name: String,
+    stack_size: usize,
+    f: impl FnOnce() + Send + 'static,
+) -> Result<(), ()> {
     crossbeam::scope(|scope: &crossbeam::thread::Scope<'_>| {
         scope
             .builder()
+            .name(name)
             .stack_size(stack_size)
             .spawn(|_| f())
             .unwrap()
@@ -98,7 +105,13 @@ fn main() {
     // Parse and snapshot each file
     let snapshots = files
         // .par_bridge() // parallel will interleave output, unfortunately
-        .map(|f| spawn_panicking(32 * 1024 * 1024, || test_snapshot(f))); // 32 MiB
+        .map(|f| {
+            spawn_panicking(
+                f.file_name().to_string_lossy().into_owned(),
+                32 * 1024 * 1024, // 32 MiB
+                || test_snapshot(f),
+            )
+        });
 
     // Collect failures
     let failures: Vec<_> = snapshots.filter_map(Result::err).collect();
