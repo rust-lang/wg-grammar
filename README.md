@@ -46,11 +46,20 @@ produce is tracked in [src/bin/snapshots](src/bin/snapshots). The tests are run 
 
     cargo run --bin snapshots --release
 
-A list of the tested productions is maintained in the test dispatcher,
-[snapshots.rs](src/bin/snapshots.rs). These tested productions are,
-to the best of the maintainers' ability, to be considered "complete"
-in terms of their structure, though the ability to remove trees from
-ambiguous forests is explicitly reserved (even when tested).
+Once a snapshot is present for a given production, that production is,
+to the best of the maintainers' ability, considered "complete"
+in terms of its structure.
+
+Note, however, that this is a shallow and non-transitive property:
+if e.g. `Expr` is tested, the structural completeness extends only
+to `Expr` itself and not to `OuterAttr` nor `ExprKind`.
+
+A test may also have the name `<production>.<variant>.<test-name>.input`,
+in which case only that variant should be considered tested and marked
+"complete" by that test case.
+
+At all times we reserve the right to change parse forests that do not produce
+unique parse trees, and to disambiguate tested parse forests to a subset.
 
 ## Links
 
