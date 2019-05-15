@@ -9,7 +9,10 @@ use std::{
 };
 
 use derive_more::Add;
-use gll::runtime::{MoreThanOne, ParseNodeKind, ParseNodeShape};
+use gll::{
+    forest::{MoreThanOne, GrammarReflector},
+    parse_node::ParseNodeShape,
+};
 use rayon::prelude::*;
 use rust_grammar::parse;
 use serde::{Deserialize, Serialize};
@@ -78,7 +81,7 @@ type ModuleContentsHandle = parse::OwnedHandle<
 
 enum Error<A> {
     Lex(proc_macro2::LexError),
-    Parse(gll::runtime::ParseError<A>),
+    Parse(gll::parser::ParseError<A>),
 }
 
 impl<A> From<proc_macro2::LexError> for Error<A> {
@@ -87,8 +90,8 @@ impl<A> From<proc_macro2::LexError> for Error<A> {
     }
 }
 
-impl<A> From<gll::runtime::ParseError<A>> for Error<A> {
-    fn from(error: gll::runtime::ParseError<A>) -> Self {
+impl<A> From<gll::parser::ParseError<A>> for Error<A> {
+    fn from(error: gll::parser::ParseError<A>) -> Self {
         Error::Parse(error)
     }
 }
@@ -159,11 +162,11 @@ fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
                     }
                 }
             };
-            match source.kind.shape() {
+            match forest.grammar.parse_node_shape(source.kind) {
                 ParseNodeShape::Opaque => {}
-                ParseNodeShape::Alias(_) => add_children(&[source.unpack_alias()]),
+                ParseNodeShape::Alias(_) => add_children(&[forest.unpack_alias(source)]),
                 ParseNodeShape::Opt(_) => {
-                    if let Some(child) = source.unpack_opt() {
+                    if let Some(child) = forest.unpack_opt(source) {
                         add_children(&[child]);
                     }
                 }

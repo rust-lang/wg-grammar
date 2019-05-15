@@ -27,8 +27,8 @@ fn main() {
         println!("cargo:rerun-if-changed={}", path.display());
 
         let src = fs::read_to_string(&path).unwrap();
-        let fragment: gll::proc_macro::Grammar = src.parse().unwrap();
-        grammar.extend(fragment.0);
+        let fragment = gll::parse_grammar(src.parse().unwrap()).unwrap();
+        grammar.extend(fragment);
     }
 
     // Generate a Rust parser from the combined grammar and write it out.
