@@ -1,5 +1,5 @@
 ---
-created: "2019-05-05T19:54:12.061196300Z"
+created: "2019-05-23T21:43:46.053084Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -11,7 +11,7 @@ Ok(
             op: BinaryOp::Mul,
             left: Expr {
                 attrs: [],
-                kind: ExprKind::Literal
+                kind: ExprKind::Literal,
             },
             right: Expr {
                 attrs: [],
@@ -19,7 +19,7 @@ Ok(
                     op: BinaryOp::Add,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
@@ -27,7 +27,7 @@ Ok(
                             op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
@@ -35,14 +35,14 @@ Ok(
                                     op: BinaryOp::Sub,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
-                            }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
+                            },
                         } | ExprKind::Binary {
                             op: BinaryOp::Sub,
                             left: Expr {
@@ -51,20 +51,20 @@ Ok(
                                     op: BinaryOp::Div,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Div,
                     left: Expr {
@@ -73,13 +73,13 @@ Ok(
                             op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
@@ -87,14 +87,14 @@ Ok(
                             op: BinaryOp::Sub,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Sub,
                     left: Expr {
@@ -103,7 +103,7 @@ Ok(
                             op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
@@ -111,14 +111,14 @@ Ok(
                                     op: BinaryOp::Div,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
-                            }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
+                            },
                         } | ExprKind::Binary {
                             op: BinaryOp::Div,
                             left: Expr {
@@ -127,26 +127,26 @@ Ok(
                                     op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
-            }
+                        kind: ExprKind::Literal,
+                    },
+                },
+            },
         } | ExprKind::Binary {
             op: BinaryOp::Add,
             left: Expr {
@@ -155,13 +155,13 @@ Ok(
                     op: BinaryOp::Mul,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
+                        kind: ExprKind::Literal,
+                    },
+                },
             },
             right: Expr {
                 attrs: [],
@@ -169,7 +169,7 @@ Ok(
                     op: BinaryOp::Div,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
@@ -177,14 +177,14 @@ Ok(
                             op: BinaryOp::Sub,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Sub,
                     left: Expr {
@@ -193,20 +193,20 @@ Ok(
                             op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
-            }
+                        kind: ExprKind::Literal,
+                    },
+                },
+            },
         } | ExprKind::Binary {
             op: BinaryOp::Div,
             left: Expr {
@@ -215,7 +215,7 @@ Ok(
                     op: BinaryOp::Mul,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
@@ -223,14 +223,14 @@ Ok(
                             op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Add,
                     left: Expr {
@@ -239,19 +239,19 @@ Ok(
                             op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
+                        kind: ExprKind::Literal,
+                    },
+                },
             },
             right: Expr {
                 attrs: [],
@@ -259,14 +259,14 @@ Ok(
                     op: BinaryOp::Sub,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
-            }
+                        kind: ExprKind::Literal,
+                    },
+                },
+            },
         } | ExprKind::Binary {
             op: BinaryOp::Sub,
             left: Expr {
@@ -275,7 +275,7 @@ Ok(
                     op: BinaryOp::Mul,
                     left: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
+                        kind: ExprKind::Literal,
                     },
                     right: Expr {
                         attrs: [],
@@ -283,7 +283,7 @@ Ok(
                             op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
@@ -291,14 +291,14 @@ Ok(
                                     op: BinaryOp::Div,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
-                            }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
+                            },
                         } | ExprKind::Binary {
                             op: BinaryOp::Div,
                             left: Expr {
@@ -307,20 +307,20 @@ Ok(
                                     op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Add,
                     left: Expr {
@@ -329,13 +329,13 @@ Ok(
                             op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
@@ -343,14 +343,14 @@ Ok(
                             op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
-                    }
+                                kind: ExprKind::Literal,
+                            },
+                        },
+                    },
                 } | ExprKind::Binary {
                     op: BinaryOp::Div,
                     left: Expr {
@@ -359,7 +359,7 @@ Ok(
                             op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
+                                kind: ExprKind::Literal,
                             },
                             right: Expr {
                                 attrs: [],
@@ -367,14 +367,14 @@ Ok(
                                     op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
-                            }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
+                            },
                         } | ExprKind::Binary {
                             op: BinaryOp::Add,
                             left: Expr {
@@ -383,30 +383,30 @@ Ok(
                                     op: BinaryOp::Mul,
                                     left: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
+                                        kind: ExprKind::Literal,
                                     },
                                     right: Expr {
                                         attrs: [],
-                                        kind: ExprKind::Literal
-                                    }
-                                }
+                                        kind: ExprKind::Literal,
+                                    },
+                                },
                             },
                             right: Expr {
                                 attrs: [],
-                                kind: ExprKind::Literal
-                            }
-                        }
+                                kind: ExprKind::Literal,
+                            },
+                        },
                     },
                     right: Expr {
                         attrs: [],
-                        kind: ExprKind::Literal
-                    }
-                }
+                        kind: ExprKind::Literal,
+                    },
+                },
             },
             right: Expr {
                 attrs: [],
-                kind: ExprKind::Literal
-            }
-        }
-    }
+                kind: ExprKind::Literal,
+            },
+        },
+    },
 )
