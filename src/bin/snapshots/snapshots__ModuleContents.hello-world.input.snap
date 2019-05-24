@@ -1,5 +1,5 @@
 ---
-created: "2019-05-05T19:54:12.487950400Z"
+created: "2019-05-23T21:43:46.020208Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -13,7 +13,7 @@ Ok(
                 kind: ItemKind::Fn {
                     header: FnHeader,
                     decl: FnDecl {
-                        name: _
+                        name: _,
                     },
                     body: Block {
                         attrs: [],
@@ -27,14 +27,14 @@ Ok(
                                                 path: RelativePath {
                                                     segments: [
                                                         PathSegment {
-                                                            ident: _
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        )
-                                    )
-                                }
+                                                            ident: _,
+                                                        },
+                                                    ],
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
                             ),
                             Stmt::Expr(
                                 Expr {
@@ -46,23 +46,23 @@ Ok(
                                                 attrs: [],
                                                 expr: Expr {
                                                     attrs: [],
-                                                    kind: ExprKind::Literal
-                                                }
+                                                    kind: ExprKind::Literal,
+                                                },
                                             } | ExprKind::Tuple {
                                                 attrs: [],
                                                 exprs: [
                                                     Expr {
                                                         attrs: [],
-                                                        kind: ExprKind::Literal
-                                                    }
-                                                ]
-                                            }
+                                                        kind: ExprKind::Literal,
+                                                    },
+                                                ],
+                                            },
                                         },
-                                        op: UnaryOp::Not
-                                    }
-                                }
+                                        op: UnaryOp::Not,
+                                    },
+                                },
                             ),
-                            Stmt::Semi
+                            Stmt::Semi,
                         ] | [
                             Stmt::Expr(
                                 Expr {
@@ -73,17 +73,17 @@ Ok(
                                                 path: RelativePath {
                                                     segments: [
                                                         PathSegment {
-                                                            ident: _
-                                                        }
-                                                    ]
-                                                }
+                                                            ident: _,
+                                                        },
+                                                    ],
+                                                },
                                             },
-                                            input: _
-                                        }
-                                    )
-                                }
+                                            input: _,
+                                        },
+                                    ),
+                                },
                             ),
-                            Stmt::Semi
+                            Stmt::Semi,
                         ] | [
                             Stmt::Item(
                                 Item {
@@ -94,20 +94,20 @@ Ok(
                                                 path: RelativePath {
                                                     segments: [
                                                         PathSegment {
-                                                            ident: _
-                                                        }
-                                                    ]
-                                                }
+                                                            ident: _,
+                                                        },
+                                                    ],
+                                                },
                                             },
-                                            input: _
-                                        }
-                                    )
-                                }
-                            )
-                        ]
-                    }
-                }
-            }
-        ]
-    }
+                                            input: _,
+                                        },
+                                    ),
+                                },
+                            ),
+                        ],
+                    },
+                },
+            },
+        ],
+    },
 )
