@@ -1,12 +1,12 @@
 #![deny(rust_2018_idioms)]
 
 use {
-    std::{fmt::Debug, fs, process::exit},
     insta::assert_snapshot_matches,
-    rust_grammar::parse,
-    walkdir::WalkDir,
-    regex::Regex,
     lazy_static::lazy_static,
+    regex::Regex,
+    rust_grammar::parse,
+    std::{fmt::Debug, fs, process::exit},
+    walkdir::WalkDir,
 };
 
 fn to_debug_str(debug: &dyn Debug) -> String {
@@ -14,13 +14,12 @@ fn to_debug_str(debug: &dyn Debug) -> String {
 }
 
 macro_rules! snapshot {
-    ($production:ident, $src:expr) => {
-        match $src.parse::<proc_macro2::TokenStream>() {
-            Ok(tts) => parse::$production::parse_with(tts, |_, result| to_debug_str(&result)),
-            // FIXME(eddyb) provide more information in this error case.
-            Err(_) => to_debug_str(&Err::<(), _>(parse::ParseError::<()>::NoParse)),
-        }
-    };
+    ($production:ident, $src:expr) => {{
+        let tts = $src
+            .parse::<proc_macro2::TokenStream>()
+            .expect("tokenization");
+        to_debug_str(&parse::$production::parse(tts))
+    }};
 }
 
 macro_rules! dispatch {
@@ -72,17 +71,20 @@ fn test_snapshot(file: walkdir::DirEntry) {
         // vis.lyg
         Vis VisRestriction
     };
-    let forest = forest
-        .replace("Span..Span", "_")
-        .replace("_ => ", "");
+    let forest = forest.replace("Span..Span", "_").replace("_ => ", "");
     let forest = RE.replace_all(&forest, "");
     assert_snapshot_matches!(file_name, forest);
 }
 
-fn spawn_panicking(stack_size: usize, f: impl FnOnce() + Send + 'static) -> Result<(), ()> {
+fn spawn_panicking(
+    name: String,
+    stack_size: usize,
+    f: impl FnOnce() + Send + 'static,
+) -> Result<(), ()> {
     crossbeam::scope(|scope: &crossbeam::thread::Scope<'_>| {
         scope
             .builder()
+            .name(name)
             .stack_size(stack_size)
             .spawn(|_| f())
             .unwrap()
@@ -103,7 +105,13 @@ fn main() {
     // Parse and snapshot each file
     let snapshots = files
         // .par_bridge() // parallel will interleave output, unfortunately
-        .map(|f| spawn_panicking(32 * 1024 * 1024, || test_snapshot(f))); // 32 MiB
+        .map(|f| {
+            spawn_panicking(
+                f.file_name().to_string_lossy().into_owned(),
+                32 * 1024 * 1024, // 32 MiB
+                || test_snapshot(f),
+            )
+        });
 
     // Collect failures
     let failures: Vec<_> = snapshots.filter_map(Result::err).collect();
