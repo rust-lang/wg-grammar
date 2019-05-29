@@ -17,7 +17,9 @@ fn main() {
         .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "lyg"));
 
     // Start with the builtin rules for proc-macro grammars.
-    let mut grammar = gll::proc_macro::builtin();
+    let mut cx = gll::proc_macro::Context::new();
+    let cx = &mut cx;
+    let mut grammar = gll::proc_macro::builtin(cx);
 
     // Add in each grammar fragment to the grammar.
     for fragment in fragments {
@@ -27,14 +29,14 @@ fn main() {
         println!("cargo:rerun-if-changed={}", path.display());
 
         let src = fs::read_to_string(&path).unwrap();
-        let fragment = gll::parse_grammar(src.parse().unwrap()).unwrap();
+        let fragment = gll::parse_grammar(cx, src.parse().unwrap()).unwrap();
         grammar.extend(fragment);
     }
 
     // Generate a Rust parser from the combined grammar and write it out.
     fs::write(
         &out_dir.join("parse.rs"),
-        gll::generate::rust::generate(&grammar).to_rustfmt_or_pretty_string(),
+        gll::generate::rust::generate(cx, &grammar).to_rustfmt_or_pretty_string(),
     )
     .unwrap();
 }
