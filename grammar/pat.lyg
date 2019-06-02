@@ -36,7 +36,7 @@ TuplePatField =
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
 StructPatFieldsAndEllipsis =
-  | Fields:{ fields:StructPatField* % "," ","? }
+  | Fields:StructPatField* %% ","
   | Ellipsis:{ ".." }
   | FieldsAndEllipsis:{ fields:StructPatField+ % "," "," ".." }
   ;

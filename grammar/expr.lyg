@@ -102,7 +102,7 @@ FieldName =
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
 StructExprFieldsAndBase =
-  | Fields:{ fields:StructExprField* % "," ","? }
+  | Fields:StructExprField* %% ","
   | Base:{ ".." base:Expr }
   | FieldsAndBase:{ fields:StructExprField+ % "," "," ".." base:Expr }
   ;
