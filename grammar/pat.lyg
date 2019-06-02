@@ -9,10 +9,10 @@ Pat =
   | Ref:{ "&" mutable:"mut"? pat:Pat }
   // unstable(box_patterns):
   | Box:{ "box" pat:Pat }
-  | Slice:{ "[" elems:SlicePatElem* % "," ","? "]" }
-  | Tuple:{ "(" fields:TuplePatField* % "," ","? ")" }
+  | Slice:{ "[" elems:SlicePatElem* %% "," "]" }
+  | Tuple:{ "(" fields:TuplePatField* %% "," ")" }
   | Path:QPath
-  | TupleStruct:{ path:Path "(" fields:TuplePatField* % "," ","? ")" }
+  | TupleStruct:{ path:Path "(" fields:TuplePatField* %% "," ")" }
   | Struct:{ path:Path "{" fields:StructPatFieldsAndEllipsis "}" }
   | MacroCall:MacroCall
   ;

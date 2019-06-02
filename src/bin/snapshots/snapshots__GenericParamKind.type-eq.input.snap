@@ -1,0 +1,56 @@
+---
+created: "2019-06-02T16:38:16.094730Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    GenericParamKind::Type {
+        name: _,
+        bounds: [
+            TypeBound::Outlives,
+            TypeBound::Trait(
+                TypeTraitBound {
+                    path: Path {
+                        path: RelativePath {
+                            segments: [
+                                PathSegment {
+                                    ident: _,
+                                },
+                            ],
+                        },
+                    },
+                },
+            ),
+        ],
+        default: Type::Path(
+            QPath::Unqualified(
+                Path {
+                    path: RelativePath {
+                        segments: [
+                            PathSegment {
+                                ident: _,
+                            },
+                        ],
+                    },
+                },
+            ),
+        ) | Type::DynTrait {
+            bounds: [
+                TypeBound::Trait(
+                    TypeTraitBound {
+                        path: Path {
+                            path: RelativePath {
+                                segments: [
+                                    PathSegment {
+                                        ident: _,
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                ),
+            ],
+        },
+    },
+)

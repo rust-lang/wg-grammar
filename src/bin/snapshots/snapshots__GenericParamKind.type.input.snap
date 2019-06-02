@@ -1,0 +1,11 @@
+---
+created: "2019-06-02T16:34:06.701903Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    GenericParamKind::Type {
+        name: _,
+    },
+)

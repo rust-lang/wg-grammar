@@ -1,0 +1,26 @@
+---
+created: "2019-06-02T15:47:34.962866Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Err(
+    ParseError {
+        at: Span,
+        expected: [
+            [
+                Punct {
+                    ch: Some(
+                        '>',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Ident(
+                    None,
+                ),
+            ],
+        ],
+    },
+)

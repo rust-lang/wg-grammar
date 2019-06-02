@@ -1,0 +1,2 @@
+// Syntactically valid, but keywords are not semantically valid.
+<'static, 'crate, '_>

@@ -1,0 +1,28 @@
+---
+created: "2019-06-02T15:47:35.041805Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    GenericArgs::AngleBracket {
+        args_and_bindings: AngleBracketGenericArgsAndBindings::Args(
+            [
+                GenericArg::Lifetime | GenericArg::Type(
+                    Type::DynTrait {
+                        bounds: [
+                            TypeBound::Outlives,
+                        ],
+                    },
+                ),
+                GenericArg::Lifetime | GenericArg::Type(
+                    Type::DynTrait {
+                        bounds: [
+                            TypeBound::Outlives,
+                        ],
+                    },
+                ),
+            ],
+        ),
+    },
+)

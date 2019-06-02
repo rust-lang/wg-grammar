@@ -1,0 +1,72 @@
+---
+created: "2019-06-02T15:11:48.996238Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    WhereClause {
+        bounds: [
+            WhereBound::TypeEq {
+                left: Type::Path(
+                    QPath::Unqualified(
+                        Path {
+                            path: RelativePath {
+                                segments: [
+                                    PathSegment {
+                                        ident: _,
+                                    },
+                                ],
+                            },
+                        },
+                    ),
+                ) | Type::DynTrait {
+                    bounds: [
+                        TypeBound::Trait(
+                            TypeTraitBound {
+                                path: Path {
+                                    path: RelativePath {
+                                        segments: [
+                                            PathSegment {
+                                                ident: _,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ),
+                    ],
+                },
+                right: Type::Path(
+                    QPath::Unqualified(
+                        Path {
+                            path: RelativePath {
+                                segments: [
+                                    PathSegment {
+                                        ident: _,
+                                    },
+                                ],
+                            },
+                        },
+                    ),
+                ) | Type::DynTrait {
+                    bounds: [
+                        TypeBound::Trait(
+                            TypeTraitBound {
+                                path: Path {
+                                    path: RelativePath {
+                                        segments: [
+                                            PathSegment {
+                                                ident: _,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ),
+                    ],
+                },
+            },
+        ],
+    },
+)

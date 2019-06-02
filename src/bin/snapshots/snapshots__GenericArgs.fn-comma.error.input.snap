@@ -1,0 +1,173 @@
+---
+created: "2019-06-02T15:36:47.294458Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Err(
+    ParseError {
+        at: Span,
+        expected: [
+            [
+                Delim(
+                    ')',
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "_",
+                    ),
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '!',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '*',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '&',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Delim(
+                    '[',
+                ),
+            ],
+            [
+                Delim(
+                    '[',
+                ),
+            ],
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "impl",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "dyn",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "typeof",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "unsafe",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "extern",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "fn",
+                    ),
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '<',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        ':',
+                    ),
+                    joint: Some(
+                        true,
+                    ),
+                },
+                Punct {
+                    ch: Some(
+                        ':',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '?',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Ident(
+                    Some(
+                        "for",
+                    ),
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '\'',
+                    ),
+                    joint: Some(
+                        true,
+                    ),
+                },
+                Ident(
+                    None,
+                ),
+            ],
+            [
+                Ident(
+                    None,
+                ),
+            ],
+        ],
+    },
+)

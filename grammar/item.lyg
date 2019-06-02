@@ -11,23 +11,23 @@ ItemKind =
   | Fn:{ header:FnHeader "fn" decl:FnDecl body:Block }
   | TypeAlias:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" }
   // unstable(existential_type):
-  | ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" }
-  | Enum:{ "enum" name:IDENT generics:Generics? where_clause:WhereClause? "{" variants:EnumVariant* % "," ","? "}" }
+  | ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* %% "+" ";" }
+  | Enum:{ "enum" name:IDENT generics:Generics? where_clause:WhereClause? "{" variants:EnumVariant* %% "," "}" }
   | Struct:{ "struct" name:IDENT generics:Generics? body:StructBody }
-  | Union:{ "union" name:IDENT generics:Generics? where_clause:WhereClause? "{" fields:RecordField* % "," ","? "}" }
+  | Union:{ "union" name:IDENT generics:Generics? where_clause:WhereClause? "{" fields:RecordField* %% "," "}" }
   | Trait:{
       unsafety:"unsafe"?
       // unstable(optin_builtin_traits):
       auto:"auto"?
       "trait" name:IDENT generics:Generics?
-      { ":" superbounds:TypeBound* % "+" "+"? }?
+      { ":" superbounds:TypeBound* %% "+" }?
       where_clause:WhereClause? "{" trait_items:TraitItem* "}"
     }
   // unstable(trait_alias):
   | TraitAlias:{
     "trait" name:IDENT generics:Generics?
-        { ":" superbounds:TypeBound* % "+" "+"? }?
-        where_clause:WhereClause? "=" bounds:TypeBound* % "+" "+"? ";"
+        { ":" superbounds:TypeBound* %% "+" }?
+        where_clause:WhereClause? "=" bounds:TypeBound* %% "+" ";"
     }
   | Impl:{
       // unstable(specialization):
@@ -43,7 +43,7 @@ ItemKind =
 
 UseTree =
   | Glob:{ prefix:UseTreePrefix? "*" }
-  | Nested:{ prefix:UseTreePrefix? "{" children:UseTree* % "," ","? "}" }
+  | Nested:{ prefix:UseTreePrefix? "{" children:UseTree* %% "," "}" }
   | Simple:{ path:Path { "as" rename:IDENT }? }
   ;
 UseTreePrefix =
@@ -65,7 +65,7 @@ TraitItem = attrs:OuterAttr* kind:TraitItemKind;
 TraitItemKind =
   | Const:{ "const" name:IDENT ":" ty:Type { "=" default:Expr }? ";" }
   | Fn:{ header:FnHeader "fn" decl:FnDecl { default_body:Block | ";" } }
-  | Type:{ "type" name:IDENT generics:Generics? { ":" bounds:TypeBound* % "+" "+"? }? where_clause:WhereClause? { "=" default:Type }? ";" }
+  | Type:{ "type" name:IDENT generics:Generics? { ":" bounds:TypeBound* %% "+" }? where_clause:WhereClause? { "=" default:Type }? ";" }
   | MacroCall:ItemMacroCall
   ;
 
@@ -80,16 +80,16 @@ ImplItemKind =
   | Fn:{ header:FnHeader "fn" decl:FnDecl body:Block }
   | Type:{ "type" name:IDENT generics:Generics? where_clause:WhereClause? "=" ty:Type ";" }
   // unstable(existential_type):
-  | ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* % "+" "+"? ";" }
+  | ExistentialType:{ "existential" "type" name:IDENT generics:Generics? where_clause:WhereClause? ":" bounds:TypeBound* %% "+" ";" }
   | MacroCall:ItemMacroCall
   ;
 
 FnHeader = constness:"const"? unsafety:"unsafe"? asyncness:"async"? { "extern" abi:Abi }?;
-FnDecl = name:IDENT generics:Generics? "(" args:FnArgs? ","? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
+FnDecl = name:IDENT generics:Generics? "(" args:FnArgs? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
 FnArgs =
-  | Regular:FnArg+ % ","
+  | Regular:FnArg+ %% ","
   | Variadic:"..."
   | RegularAndVariadic:{ args:FnArg+ % "," "," "..." }
   ;
@@ -102,16 +102,16 @@ FnArg =
 EnumVariant = attrs:OuterAttr* name:IDENT kind:EnumVariantKind { "=" discr:Expr }?;
 EnumVariantKind =
   | Unit:{}
-  | Tuple:{ "(" fields:TupleField* % "," ","? ")" }
-  | Record:{ "{" fields:RecordField* % "," ","? "}" }
+  | Tuple:{ "(" fields:TupleField* %% "," ")" }
+  | Record:{ "{" fields:RecordField* %% "," "}" }
   ;
 
 // FIXME(eddyb) could maybe be shared more with `EnumVariantKind`?
 // The problem is the semicolons for `Unit` and `Tuple`, and the where clauses.
 StructBody =
   | Unit:{ where_clause:WhereClause? ";" }
-  | Tuple:{ "(" fields:TupleField* % "," ","? ")" where_clause:WhereClause? ";" }
-  | Record:{ where_clause:WhereClause? "{" fields:RecordField* % "," ","? "}" }
+  | Tuple:{ "(" fields:TupleField* %% "," ")" where_clause:WhereClause? ";" }
+  | Record:{ where_clause:WhereClause? "{" fields:RecordField* %% "," "}" }
   ;
 
 TupleField = attrs:OuterAttr* vis:Vis? ty:Type;
