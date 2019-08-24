@@ -1,6 +1,6 @@
 ---
-created: "2019-06-02T16:25:08.528648Z"
-creator: insta@0.8.1
+created: "2019-08-24T22:44:33.965415610Z"
+creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
 ---
@@ -9,9 +9,14 @@ Err(
         at: Span,
         expected: [
             [
+                Ident(
+                    None,
+                ),
+            ],
+            [
                 Punct {
                     ch: Some(
-                        '>',
+                        '#',
                     ),
                     joint: None,
                 },
@@ -19,7 +24,7 @@ Err(
             [
                 Punct {
                     ch: Some(
-                        '#',
+                        '>',
                     ),
                     joint: None,
                 },
@@ -33,11 +38,6 @@ Err(
                         true,
                     ),
                 },
-                Ident(
-                    None,
-                ),
-            ],
-            [
                 Ident(
                     None,
                 ),

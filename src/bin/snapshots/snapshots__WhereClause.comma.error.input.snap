@@ -1,5 +1,5 @@
 ---
-created: "2019-05-30T20:27:12.087257Z"
+created: "2019-08-24T22:44:34.011817302Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -9,10 +9,33 @@ Err(
         at: Span,
         expected: [
             [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Delim(
+                    '[',
+                ),
+            ],
+            [
+                Delim(
+                    '[',
+                ),
+            ],
+            [
                 Ident(
-                    Some(
-                        "for",
-                    ),
+                    None,
                 ),
             ],
             [
@@ -23,74 +46,9 @@ Err(
                 ),
             ],
             [
-                Punct {
-                    ch: Some(
-                        '!',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Delim(
-                    '(',
-                ),
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '*',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '&',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Delim(
-                    '[',
-                ),
-            ],
-            [
-                Delim(
-                    '[',
-                ),
-            ],
-            [
-                Delim(
-                    '(',
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "impl",
-                    ),
-                ),
-            ],
-            [
                 Ident(
                     Some(
                         "dyn",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "typeof",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "unsafe",
                     ),
                 ),
             ],
@@ -109,9 +67,53 @@ Err(
                 ),
             ],
             [
+                Ident(
+                    Some(
+                        "for",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "impl",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "typeof",
+                    ),
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "unsafe",
+                    ),
+                ),
+            ],
+            [
                 Punct {
                     ch: Some(
-                        '<',
+                        '!',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '&',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '*',
                     ),
                     joint: None,
                 },
@@ -133,9 +135,12 @@ Err(
                 },
             ],
             [
-                Delim(
-                    '(',
-                ),
+                Punct {
+                    ch: Some(
+                        '<',
+                    ),
+                    joint: None,
+                },
             ],
             [
                 Punct {
@@ -154,11 +159,6 @@ Err(
                         true,
                     ),
                 },
-                Ident(
-                    None,
-                ),
-            ],
-            [
                 Ident(
                     None,
                 ),
