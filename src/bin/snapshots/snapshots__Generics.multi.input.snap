@@ -1,0 +1,103 @@
+---
+created: "2019-06-02T16:25:08.582146Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    Generics {
+        params: [
+            GenericParam {
+                attrs: [
+                    OuterAttr {
+                        attr: Attr {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                        },
+                                    ],
+                                },
+                            },
+                            input: _,
+                        },
+                    },
+                ],
+                kind: GenericParamKind::Lifetime {
+                    name: _,
+                    bounds: [
+                        LifetimeBound {
+                            outlives: _,
+                        },
+                        LifetimeBound {
+                            outlives: _,
+                        },
+                    ],
+                },
+            },
+            GenericParam {
+                attrs: [],
+                kind: GenericParamKind::Type {
+                    name: _,
+                },
+            },
+            GenericParam {
+                attrs: [],
+                kind: GenericParamKind::Type {
+                    name: _,
+                    bounds: [
+                        TypeBound::Trait(
+                            TypeTraitBound {
+                                path: Path {
+                                    path: RelativePath {
+                                        segments: [
+                                            PathSegment {
+                                                ident: _,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ),
+                    ],
+                },
+            },
+            GenericParam {
+                attrs: [],
+                kind: GenericParamKind::Type {
+                    name: _,
+                    default: Type::Path(
+                        QPath::Unqualified(
+                            Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                        },
+                                    ],
+                                },
+                            },
+                        ),
+                    ) | Type::DynTrait {
+                        bounds: [
+                            TypeBound::Trait(
+                                TypeTraitBound {
+                                    path: Path {
+                                        path: RelativePath {
+                                            segments: [
+                                                PathSegment {
+                                                    ident: _,
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ),
+                        ],
+                    },
+                },
+            },
+        ],
+    },
+)

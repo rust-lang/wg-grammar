@@ -1,0 +1,141 @@
+---
+created: "2019-06-02T15:11:48.955334Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    WhereClause {
+        bounds: [
+            WhereBound::Type {
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                            args: GenericArgs::AngleBracket {
+                                                args_and_bindings: AngleBracketGenericArgsAndBindings::Args(
+                                                    [
+                                                        GenericArg::Lifetime | GenericArg::Type(
+                                                            Type::DynTrait {
+                                                                bounds: [
+                                                                    TypeBound::Outlives,
+                                                                ],
+                                                            },
+                                                        ),
+                                                    ],
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
+                ty: Type::DynTrait {
+                    bounds: [
+                        TypeBound::Trait(
+                            TypeTraitBound {
+                                binder: ForAllBinder {
+                                    generics: Generics {
+                                        params: [
+                                            GenericParam {
+                                                attrs: [],
+                                                kind: GenericParamKind::Lifetime {
+                                                    name: _,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                path: Path {
+                                    path: RelativePath {
+                                        segments: [
+                                            PathSegment {
+                                                ident: _,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ),
+                    ],
+                },
+            } | WhereBound::Type {
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                            args: GenericArgs::AngleBracket {
+                                                args_and_bindings: AngleBracketGenericArgsAndBindings::Args(
+                                                    [
+                                                        GenericArg::Lifetime | GenericArg::Type(
+                                                            Type::DynTrait {
+                                                                bounds: [
+                                                                    TypeBound::Outlives,
+                                                                ],
+                                                            },
+                                                        ),
+                                                    ],
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
+                binder: ForAllBinder {
+                    generics: Generics {
+                        params: [
+                            GenericParam {
+                                attrs: [],
+                                kind: GenericParamKind::Lifetime {
+                                    name: _,
+                                },
+                            },
+                        ],
+                    },
+                },
+                ty: Type::Path(
+                    QPath::Unqualified(
+                        Path {
+                            path: RelativePath {
+                                segments: [
+                                    PathSegment {
+                                        ident: _,
+                                    },
+                                ],
+                            },
+                        },
+                    ),
+                ) | Type::DynTrait {
+                    bounds: [
+                        TypeBound::Trait(
+                            TypeTraitBound {
+                                path: Path {
+                                    path: RelativePath {
+                                        segments: [
+                                            PathSegment {
+                                                ident: _,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ),
+                    ],
+                },
+            },
+        ],
+    },
+)

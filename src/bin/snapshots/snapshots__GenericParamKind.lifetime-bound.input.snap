@@ -1,0 +1,16 @@
+---
+created: "2019-06-02T16:25:08.603539Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    GenericParamKind::Lifetime {
+        name: _,
+        bounds: [
+            LifetimeBound {
+                outlives: _,
+            },
+        ],
+    },
+)

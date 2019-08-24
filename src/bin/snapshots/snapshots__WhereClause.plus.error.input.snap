@@ -1,0 +1,75 @@
+---
+created: "2019-08-24T22:44:34.060760871Z"
+creator: insta@0.7.4
+source: src/bin/snapshots.rs
+expression: forest
+---
+Err(
+    ParseError {
+        at: Span,
+        expected: [
+            [
+                Delim(
+                    '(',
+                ),
+            ],
+            [
+                Ident(
+                    None,
+                ),
+            ],
+            [
+                Ident(
+                    Some(
+                        "for",
+                    ),
+                ),
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        ',',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        ':',
+                    ),
+                    joint: Some(
+                        true,
+                    ),
+                },
+                Punct {
+                    ch: Some(
+                        ':',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '?',
+                    ),
+                    joint: None,
+                },
+            ],
+            [
+                Punct {
+                    ch: Some(
+                        '\'',
+                    ),
+                    joint: Some(
+                        true,
+                    ),
+                },
+                Ident(
+                    None,
+                ),
+            ],
+        ],
+    },
+)

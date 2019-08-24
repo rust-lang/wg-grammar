@@ -6,21 +6,21 @@ Type =
   | Ref:{ "&" lt:LIFETIME? mutable:"mut"? pointee:Type }
   | Slice:{ "[" elem:Type "]" }
   | Array:{ "[" elem:Type ";" len:Expr "]" }
-  | Tuple:{ "(" tys:Type* % "," ","? ")" }
+  | Tuple:{ "(" tys:Type* %% "," ")" }
   | Path:QPath
   | FnPtr:{
       binder:ForAllBinder? unsafety:"unsafe"? { "extern" abi:Abi }?
-      "fn" "(" inputs:FnSigInputs? ","? ")" { "->" ret_ty:Type }?
+      "fn" "(" inputs:FnSigInputs? ")" { "->" ret_ty:Type }?
     }
-  | ImplTrait:{ "impl" bounds:TypeBound+ % "+" "+"? }
-  | DynTrait:{ "dyn"? bounds:TypeBound+ % "+" "+"? }
+  | ImplTrait:{ "impl" bounds:TypeBound+ %% "+" }
+  | DynTrait:{ "dyn"? bounds:TypeBound+ %% "+" }
     // unstable(not exposed to users):
   | TypeOf:{ "typeof" "(" expr:Expr ")" }
   | MacroCall:MacroCall
   ;
 
 FnSigInputs =
-  | Regular:FnSigInput+ % ","
+  | Regular:FnSigInput+ %% ","
   | Variadic:"..."
   | RegularAndVariadic:{ inputs:FnSigInput+ % "," "," "..." }
   ;

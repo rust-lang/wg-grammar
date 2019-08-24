@@ -1,0 +1,70 @@
+---
+created: "2019-06-02T15:36:47.129316Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    GenericArgs::Paren {
+        inputs: [
+            Type::Path(
+                QPath::Unqualified(
+                    Path {
+                        path: RelativePath {
+                            segments: [
+                                PathSegment {
+                                    ident: _,
+                                },
+                            ],
+                        },
+                    },
+                ),
+            ) | Type::DynTrait {
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
+            },
+            Type::Path(
+                QPath::Unqualified(
+                    Path {
+                        path: RelativePath {
+                            segments: [
+                                PathSegment {
+                                    ident: _,
+                                },
+                            ],
+                        },
+                    },
+                ),
+            ) | Type::DynTrait {
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
+            },
+        ],
+    },
+)

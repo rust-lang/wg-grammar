@@ -1,0 +1,2 @@
+// Although this is syntactically valid, it is not semantically valid.
+<T, 'a>

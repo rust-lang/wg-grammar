@@ -1,0 +1,24 @@
+---
+created: "2019-06-02T16:25:08.379321Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    Generics {
+        params: [
+            GenericParam {
+                attrs: [],
+                kind: GenericParamKind::Type {
+                    name: _,
+                },
+            },
+            GenericParam {
+                attrs: [],
+                kind: GenericParamKind::Lifetime {
+                    name: _,
+                },
+            },
+        ],
+    },
+)

@@ -9,8 +9,16 @@ use {
     walkdir::WalkDir,
 };
 
-fn to_debug_str(debug: &dyn Debug) -> String {
-    format!("{:#?}", debug)
+fn parse_result_to_str<T: Debug>(
+    mut result: Result<T, gll::parser::ParseError<proc_macro2::Span>>,
+) -> String {
+    if let Err(error) = &mut result {
+        // HACK(eddyb) this is inefficient - `expected` should be already
+        // sorted for us, so this is a temporary workaround.
+        error.expected.sort_by_cached_key(|x| format!("{:?}", x));
+    }
+
+    format!("{:#?}", result)
 }
 
 macro_rules! snapshot {
@@ -18,7 +26,7 @@ macro_rules! snapshot {
         let tts = $src
             .parse::<proc_macro2::TokenStream>()
             .expect("tokenization");
-        to_debug_str(&parse::$production::parse(tts))
+        parse_result_to_str(parse::$production::parse(tts))
     }};
 }
 

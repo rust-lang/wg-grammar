@@ -1,0 +1,33 @@
+---
+created: "2019-06-02T14:39:53.544417Z"
+creator: insta@0.7.4
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    WhereClause {
+        bounds: [
+            WhereBound::Lifetime {
+                lt: _,
+                bounds: [
+                    LifetimeBound {
+                        outlives: _,
+                    },
+                    LifetimeBound {
+                        outlives: _,
+                    },
+                ],
+            } | WhereBound::Type {
+                bounds: [
+                    TypeBound::Outlives,
+                    TypeBound::Outlives,
+                ],
+                ty: Type::DynTrait {
+                    bounds: [
+                        TypeBound::Outlives,
+                    ],
+                },
+            },
+        ],
+    },
+)

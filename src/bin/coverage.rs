@@ -139,8 +139,15 @@ fn report_file_result(
                     "(missing location information; \
                      set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
                 );
+
             }
-            eprintln!("Expected: {:?}", error.expected);
+
+            // HACK(eddyb) this is inefficient - `expected` should be already
+            // sorted for us, so this is a temporary workaround.
+            let mut expected = error.expected.clone();
+            expected.sort_by_cached_key(|x| format!("{:?}", x));
+
+            eprintln!("Expected: {:?}", expected);
         }
         (Err(Error::Lex(e)), _) => eprintln!("FAIL ({:?})", e),
     }

@@ -1,0 +1,37 @@
+---
+created: "2019-06-02T17:01:18.008697Z"
+creator: insta@0.8.1
+source: src/bin/snapshots.rs
+expression: forest
+---
+Ok(
+    Type::Path(
+        QPath::Unqualified(
+            Path {
+                path: RelativePath {
+                    segments: [
+                        PathSegment {
+                            ident: _,
+                        },
+                    ],
+                },
+            },
+        ),
+    ) | Type::DynTrait {
+        bounds: [
+            TypeBound::Trait(
+                TypeTraitBound {
+                    path: Path {
+                        path: RelativePath {
+                            segments: [
+                                PathSegment {
+                                    ident: _,
+                                },
+                            ],
+                        },
+                    },
+                },
+            ),
+        ],
+    },
+)
