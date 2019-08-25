@@ -1,5 +1,5 @@
 ---
-created: "2019-06-02T14:39:53.544417Z"
+created: "2019-08-25T01:01:21.891893880Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -18,15 +18,15 @@ Ok(
                     },
                 ],
             } | WhereBound::Type {
-                bounds: [
-                    TypeBound::Outlives,
-                    TypeBound::Outlives,
-                ],
                 ty: Type::DynTrait {
                     bounds: [
                         TypeBound::Outlives,
                     ],
                 },
+                bounds: [
+                    TypeBound::Outlives,
+                    TypeBound::Outlives,
+                ],
             },
         ],
     },

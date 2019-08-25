@@ -1,6 +1,6 @@
 ---
-created: "2019-06-02T15:11:48.955334Z"
-creator: insta@0.8.1
+created: "2019-08-25T01:01:22.755527472Z"
+creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
 ---
@@ -8,34 +8,6 @@ Ok(
     WhereClause {
         bounds: [
             WhereBound::Type {
-                bounds: [
-                    TypeBound::Trait(
-                        TypeTraitBound {
-                            path: Path {
-                                path: RelativePath {
-                                    segments: [
-                                        PathSegment {
-                                            ident: _,
-                                            args: GenericArgs::AngleBracket {
-                                                args_and_bindings: AngleBracketGenericArgsAndBindings::Args(
-                                                    [
-                                                        GenericArg::Lifetime | GenericArg::Type(
-                                                            Type::DynTrait {
-                                                                bounds: [
-                                                                    TypeBound::Outlives,
-                                                                ],
-                                                            },
-                                                        ),
-                                                    ],
-                                                ),
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ),
-                ],
                 ty: Type::DynTrait {
                     bounds: [
                         TypeBound::Trait(
@@ -65,7 +37,6 @@ Ok(
                         ),
                     ],
                 },
-            } | WhereBound::Type {
                 bounds: [
                     TypeBound::Trait(
                         TypeTraitBound {
@@ -94,6 +65,7 @@ Ok(
                         },
                     ),
                 ],
+            } | WhereBound::Type {
                 binder: ForAllBinder {
                     generics: Generics {
                         params: [
@@ -135,6 +107,34 @@ Ok(
                         ),
                     ],
                 },
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                            args: GenericArgs::AngleBracket {
+                                                args_and_bindings: AngleBracketGenericArgsAndBindings::Args(
+                                                    [
+                                                        GenericArg::Lifetime | GenericArg::Type(
+                                                            Type::DynTrait {
+                                                                bounds: [
+                                                                    TypeBound::Outlives,
+                                                                ],
+                                                            },
+                                                        ),
+                                                    ],
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
             },
         ],
     },

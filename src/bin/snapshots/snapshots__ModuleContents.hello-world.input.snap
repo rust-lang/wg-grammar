@@ -1,5 +1,5 @@
 ---
-created: "2019-05-23T21:43:46.020208Z"
+created: "2019-08-25T01:01:24.040844569Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -40,6 +40,7 @@ Ok(
                                 Expr {
                                     attrs: [],
                                     kind: ExprKind::Unary {
+                                        op: UnaryOp::Not,
                                         expr: Expr {
                                             attrs: [],
                                             kind: ExprKind::Paren {
@@ -58,7 +59,6 @@ Ok(
                                                 ],
                                             },
                                         },
-                                        op: UnaryOp::Not,
                                     },
                                 },
                             ),

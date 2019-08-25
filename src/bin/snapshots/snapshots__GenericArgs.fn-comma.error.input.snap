@@ -1,5 +1,5 @@
 ---
-created: "2019-08-24T22:44:34.127213707Z"
+created: "2019-08-25T02:12:18.335518347Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -8,166 +8,25 @@ Err(
     ParseError {
         at: Span,
         expected: [
-            [
-                Delim(
-                    '(',
-                ),
-            ],
-            [
-                Delim(
-                    '(',
-                ),
-            ],
-            [
-                Delim(
-                    '(',
-                ),
-            ],
-            [
-                Delim(
-                    ')',
-                ),
-            ],
-            [
-                Delim(
-                    '[',
-                ),
-            ],
-            [
-                Delim(
-                    '[',
-                ),
-            ],
-            [
-                Ident(
-                    None,
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "_",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "dyn",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "extern",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "fn",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "for",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "impl",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "typeof",
-                    ),
-                ),
-            ],
-            [
-                Ident(
-                    Some(
-                        "unsafe",
-                    ),
-                ),
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '!',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '&',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '*',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        ':',
-                    ),
-                    joint: Some(
-                        true,
-                    ),
-                },
-                Punct {
-                    ch: Some(
-                        ':',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '<',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '?',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '\'',
-                    ),
-                    joint: Some(
-                        true,
-                    ),
-                },
-                Ident(
-                    None,
-                ),
-            ],
+            "(",
+            ")",
+            "[",
+            IDENT,
+            "_",
+            "dyn",
+            "extern",
+            "fn",
+            "for",
+            "impl",
+            "typeof",
+            "unsafe",
+            "!",
+            "&",
+            LIFETIME,
+            "*",
+            "::",
+            "<",
+            "?",
         ],
     },
 )

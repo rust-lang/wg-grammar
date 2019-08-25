@@ -1,5 +1,5 @@
 ---
-created: "2019-05-23T21:43:46.053084Z"
+created: "2019-08-25T01:01:25.355353066Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -8,35 +8,35 @@ Ok(
     Expr {
         attrs: [],
         kind: ExprKind::Binary {
-            op: BinaryOp::Mul,
             left: Expr {
                 attrs: [],
                 kind: ExprKind::Literal,
             },
+            op: BinaryOp::Mul,
             right: Expr {
                 attrs: [],
                 kind: ExprKind::Binary {
-                    op: BinaryOp::Add,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
+                    op: BinaryOp::Add,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Div,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
+                                    left: Expr {
+                                        attrs: [],
+                                        kind: ExprKind::Literal,
+                                    },
                                     op: BinaryOp::Sub,
-                                    left: Expr {
-                                        attrs: [],
-                                        kind: ExprKind::Literal,
-                                    },
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
@@ -44,21 +44,21 @@ Ok(
                                 },
                             },
                         } | ExprKind::Binary {
-                            op: BinaryOp::Sub,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Div,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Div,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
                                 },
                             },
+                            op: BinaryOp::Sub,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -66,29 +66,29 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Div,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Add,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Div,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Sub,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Sub,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -96,23 +96,22 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Sub,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Add,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Div,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Div,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
@@ -120,27 +119,28 @@ Ok(
                                 },
                             },
                         } | ExprKind::Binary {
-                            op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Add,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
                                 },
                             },
+                            op: BinaryOp::Div,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Sub,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
@@ -148,37 +148,37 @@ Ok(
                 },
             },
         } | ExprKind::Binary {
+            left: Expr {
+                attrs: [],
+                kind: ExprKind::Binary {
+                    left: Expr {
+                        attrs: [],
+                        kind: ExprKind::Literal,
+                    },
+                    op: BinaryOp::Mul,
+                    right: Expr {
+                        attrs: [],
+                        kind: ExprKind::Literal,
+                    },
+                },
+            },
             op: BinaryOp::Add,
-            left: Expr {
-                attrs: [],
-                kind: ExprKind::Binary {
-                    op: BinaryOp::Mul,
-                    left: Expr {
-                        attrs: [],
-                        kind: ExprKind::Literal,
-                    },
-                    right: Expr {
-                        attrs: [],
-                        kind: ExprKind::Literal,
-                    },
-                },
-            },
             right: Expr {
                 attrs: [],
                 kind: ExprKind::Binary {
-                    op: BinaryOp::Div,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
+                    op: BinaryOp::Div,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
+                            left: Expr {
+                                attrs: [],
+                                kind: ExprKind::Literal,
+                            },
                             op: BinaryOp::Sub,
-                            left: Expr {
-                                attrs: [],
-                                kind: ExprKind::Literal,
-                            },
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -186,21 +186,21 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Sub,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Div,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Sub,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
@@ -208,23 +208,22 @@ Ok(
                 },
             },
         } | ExprKind::Binary {
-            op: BinaryOp::Div,
             left: Expr {
                 attrs: [],
                 kind: ExprKind::Binary {
-                    op: BinaryOp::Mul,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
+                    op: BinaryOp::Mul,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Add,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -232,35 +231,36 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Add,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Mul,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Add,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
                 },
             },
+            op: BinaryOp::Div,
             right: Expr {
                 attrs: [],
                 kind: ExprKind::Binary {
-                    op: BinaryOp::Sub,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
+                    op: BinaryOp::Sub,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
@@ -268,31 +268,30 @@ Ok(
                 },
             },
         } | ExprKind::Binary {
-            op: BinaryOp::Sub,
             left: Expr {
                 attrs: [],
                 kind: ExprKind::Binary {
-                    op: BinaryOp::Mul,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
+                    op: BinaryOp::Mul,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Add,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
+                                    left: Expr {
+                                        attrs: [],
+                                        kind: ExprKind::Literal,
+                                    },
                                     op: BinaryOp::Div,
-                                    left: Expr {
-                                        attrs: [],
-                                        kind: ExprKind::Literal,
-                                    },
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
@@ -300,21 +299,21 @@ Ok(
                                 },
                             },
                         } | ExprKind::Binary {
-                            op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Add,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
                                 },
                             },
+                            op: BinaryOp::Div,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -322,29 +321,29 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Add,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Mul,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Add,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Div,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Div,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
@@ -352,23 +351,22 @@ Ok(
                         },
                     },
                 } | ExprKind::Binary {
-                    op: BinaryOp::Div,
                     left: Expr {
                         attrs: [],
                         kind: ExprKind::Binary {
-                            op: BinaryOp::Mul,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
+                            op: BinaryOp::Mul,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Add,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Add,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
@@ -376,33 +374,35 @@ Ok(
                                 },
                             },
                         } | ExprKind::Binary {
-                            op: BinaryOp::Add,
                             left: Expr {
                                 attrs: [],
                                 kind: ExprKind::Binary {
-                                    op: BinaryOp::Mul,
                                     left: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
+                                    op: BinaryOp::Mul,
                                     right: Expr {
                                         attrs: [],
                                         kind: ExprKind::Literal,
                                     },
                                 },
                             },
+                            op: BinaryOp::Add,
                             right: Expr {
                                 attrs: [],
                                 kind: ExprKind::Literal,
                             },
                         },
                     },
+                    op: BinaryOp::Div,
                     right: Expr {
                         attrs: [],
                         kind: ExprKind::Literal,
                     },
                 },
             },
+            op: BinaryOp::Sub,
             right: Expr {
                 attrs: [],
                 kind: ExprKind::Literal,

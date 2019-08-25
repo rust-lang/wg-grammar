@@ -9,15 +9,13 @@ use {
     walkdir::WalkDir,
 };
 
-fn parse_result_to_str<T: Debug>(
-    mut result: Result<T, gll::parser::ParseError<proc_macro2::Span>>,
-) -> String {
-    if let Err(error) = &mut result {
-        // HACK(eddyb) this is inefficient - `expected` should be already
-        // sorted for us, so this is a temporary workaround.
-        error.expected.sort_by_cached_key(|x| format!("{:?}", x));
-    }
+type ProcMacroPat =
+    gll::grammer::proc_macro::Pat<&'static [gll::grammer::proc_macro::FlatTokenPat<&'static str>]>;
 
+fn parse_result_to_str<T: Debug>(
+    result: Result<T, gll::grammer::parser::ParseError<proc_macro2::Span, ProcMacroPat>>,
+) -> String {
+    // FIXME(eddyb) print the location properly in case of error.
     format!("{:#?}", result)
 }
 
