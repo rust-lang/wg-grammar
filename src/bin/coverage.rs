@@ -9,10 +9,7 @@ use std::{
 };
 
 use derive_more::Add;
-use gll::{
-    forest::{MoreThanOne, GrammarReflector},
-    parse_node::ParseNodeShape,
-};
+use gll::grammer::forest::{GrammarReflector, MoreThanOne, NodeShape};
 use rayon::prelude::*;
 use rust_grammar::parse;
 use serde::{Deserialize, Serialize};
@@ -72,26 +69,29 @@ enum Command {
     },
 }
 
-type ModuleContentsResult = Result<ModuleContentsHandle, Error<proc_macro2::Span>>;
+type ProcMacroPat =
+    gll::grammer::proc_macro::Pat<&'static [gll::grammer::proc_macro::FlatTokenPat<&'static str>]>;
+
+type ModuleContentsResult = Result<ModuleContentsHandle, Error<proc_macro2::Span, ProcMacroPat>>;
 
 type ModuleContentsHandle = parse::OwnedHandle<
     proc_macro2::TokenStream,
     parse::ModuleContents<'static, 'static, proc_macro2::TokenStream>,
 >;
 
-enum Error<A> {
+enum Error<A, Pat> {
     Lex(proc_macro2::LexError),
-    Parse(gll::parser::ParseError<A>),
+    Parse(gll::grammer::parser::ParseError<A, Pat>),
 }
 
-impl<A> From<proc_macro2::LexError> for Error<A> {
+impl<A, Pat> From<proc_macro2::LexError> for Error<A, Pat> {
     fn from(error: proc_macro2::LexError) -> Self {
         Error::Lex(error)
     }
 }
 
-impl<A> From<gll::parser::ParseError<A>> for Error<A> {
-    fn from(error: gll::parser::ParseError<A>) -> Self {
+impl<A, Pat> From<gll::grammer::parser::ParseError<A, Pat>> for Error<A, Pat> {
+    fn from(error: gll::grammer::parser::ParseError<A, Pat>) -> Self {
         Error::Parse(error)
     }
 }
@@ -139,15 +139,9 @@ fn report_file_result(
                     "(missing location information; \
                      set `RUSTFLAGS='--cfg procmacro2_semver_exempt'`)"
                 );
-
             }
 
-            // HACK(eddyb) this is inefficient - `expected` should be already
-            // sorted for us, so this is a temporary workaround.
-            let mut expected = error.expected.clone();
-            expected.sort_by_cached_key(|x| format!("{:?}", x));
-
-            eprintln!("Expected: {:?}", expected);
+            eprintln!("Expected: {:?}", error.expected);
         }
         (Err(Error::Lex(e)), _) => eprintln!("FAIL ({:?})", e),
     }
@@ -169,16 +163,16 @@ fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
                     }
                 }
             };
-            match forest.grammar.parse_node_shape(source.kind) {
-                ParseNodeShape::Opaque => {}
-                ParseNodeShape::Alias(_) => add_children(&[forest.unpack_alias(source)]),
-                ParseNodeShape::Opt(_) => {
+            match forest.grammar.node_shape(source.kind) {
+                NodeShape::Opaque => {}
+                NodeShape::Alias(_) => add_children(&[forest.unpack_alias(source)]),
+                NodeShape::Opt(_) => {
                     if let Some(child) = forest.unpack_opt(source) {
                         add_children(&[child]);
                     }
                 }
-                ParseNodeShape::Choice => add_children(&[forest.one_choice(source)?]),
-                ParseNodeShape::Split(..) => {
+                NodeShape::Choice => add_children(&[forest.one_choice(source)?]),
+                NodeShape::Split(..) => {
                     let (left, right) = forest.one_split(source)?;
                     add_children(&[left, right])
                 }

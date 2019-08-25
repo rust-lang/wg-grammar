@@ -17,9 +17,9 @@ fn main() {
         .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "lyg"));
 
     // Start with the builtin rules for proc-macro grammars.
-    let mut cx = gll::proc_macro::Context::new();
+    let mut cx = gll::grammer::proc_macro::Context::new();
     let cx = &mut cx;
-    let mut grammar = gll::proc_macro::builtin(cx);
+    let mut grammar = gll::grammer::proc_macro::builtin(cx);
 
     // Add in each grammar fragment to the grammar.
     for fragment in fragments {

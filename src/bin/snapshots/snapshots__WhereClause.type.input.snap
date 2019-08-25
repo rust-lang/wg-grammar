@@ -1,6 +1,6 @@
 ---
-created: "2019-06-02T14:56:55.228444Z"
-creator: insta@0.8.1
+created: "2019-08-25T01:01:23.474298824Z"
+creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
 ---
@@ -8,21 +8,6 @@ Ok(
     WhereClause {
         bounds: [
             WhereBound::Type {
-                bounds: [
-                    TypeBound::Trait(
-                        TypeTraitBound {
-                            path: Path {
-                                path: RelativePath {
-                                    segments: [
-                                        PathSegment {
-                                            ident: _,
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ),
-                ],
                 ty: Type::Path(
                     QPath::Unqualified(
                         Path {
@@ -52,6 +37,21 @@ Ok(
                         ),
                     ],
                 },
+                bounds: [
+                    TypeBound::Trait(
+                        TypeTraitBound {
+                            path: Path {
+                                path: RelativePath {
+                                    segments: [
+                                        PathSegment {
+                                            ident: _,
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ),
+                ],
             },
         ],
     },

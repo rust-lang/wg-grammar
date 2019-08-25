@@ -1,5 +1,5 @@
 ---
-created: "2019-08-24T22:44:33.965415610Z"
+created: "2019-08-25T02:12:18.060129095Z"
 creator: insta@0.7.4
 source: src/bin/snapshots.rs
 expression: forest
@@ -8,40 +8,10 @@ Err(
     ParseError {
         at: Span,
         expected: [
-            [
-                Ident(
-                    None,
-                ),
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '#',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '>',
-                    ),
-                    joint: None,
-                },
-            ],
-            [
-                Punct {
-                    ch: Some(
-                        '\'',
-                    ),
-                    joint: Some(
-                        true,
-                    ),
-                },
-                Ident(
-                    None,
-                ),
-            ],
+            IDENT,
+            "#",
+            LIFETIME,
+            ">",
         ],
     },
 )
