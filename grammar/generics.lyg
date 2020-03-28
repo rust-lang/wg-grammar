@@ -3,6 +3,8 @@ GenericParam = attrs:OuterAttr* kind:GenericParamKind;
 GenericParamKind =
   | Lifetime:{ name:LIFETIME { ":" bounds:LifetimeBound* %% "+" }? }
   | Type:{ name:IDENT { ":" bounds:TypeBound* %% "+" }? { "=" default:Type }? }
+  // unstable(const_generics):
+  | Const:{ "const" name:IDENT ":" ty:Type }
   ;
 
 ForAllBinder = "for" generics:Generics;
@@ -39,6 +41,8 @@ AngleBracketGenericArgsAndConstraints =
 GenericArg =
   | Lifetime:LIFETIME
   | Type:Type
+  // unstable(const_generics):
+  | Const:{ neg:"-"? lit:LITERAL | "{" expr:Expr "}" }
   ;
 AssocTypeConstraint =
   | Eq:{ name:IDENT "=" ty:Type }
