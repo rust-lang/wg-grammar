@@ -66,8 +66,7 @@ fn test_snapshot(file: walkdir::DirEntry) {
         // macro.lyg
         MacroCall MacroInput ItemMacroCall ItemMacroInput
         // pat.lyg
-        Pat PatRangeValue Binding SlicePatElem TuplePatField StructPatFieldsAndEllipsis
-        StructPatField
+        Pat PatRangeValue Binding StructPatFieldsAndEllipsis StructPatField
         // path.lyg
         Path RelativePath PathSegment QSelf QPath
         // stmt.lyg
