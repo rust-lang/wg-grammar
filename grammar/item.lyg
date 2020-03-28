@@ -90,8 +90,8 @@ FnDecl = name:IDENT generics:Generics? "(" params:FnParams? ")" { "->" ret_ty:Ty
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
 FnParams =
   | Regular:FnParam+ %% ","
-  | Variadic:"..."
-  | RegularAndVariadic:{ args:FnParam+ % "," "," "..." }
+  | CVariadic:FnCVariadicParam
+  | RegularAndCVariadic:{ args:FnParam+ % "," "," c_variadic:FnCVariadicParam }
   ;
 FnParam = attrs:OuterAttr* kind:FnParamKind;
 FnParamKind =
@@ -99,6 +99,8 @@ FnParamKind =
   | SelfRef:{ "&" lt:LIFETIME? mutable:"mut"? "self" }
   | Regular:FnSigInput
   ;
+// unstable(c_variadic):
+FnCVariadicParam = { pat:Pat ":" }? "...";
 
 EnumVariant = attrs:OuterAttr* name:IDENT kind:EnumVariantKind { "=" discr:Expr }?;
 EnumVariantKind =

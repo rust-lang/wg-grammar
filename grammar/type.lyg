@@ -21,7 +21,7 @@ Type =
 
 FnSigInputs =
   | Regular:FnSigInput+ %% ","
-  | Variadic:"..."
-  | RegularAndVariadic:{ inputs:FnSigInput+ % "," "," "..." }
+  | CVariadic:"..."
+  | RegularAndCVariadic:{ inputs:FnSigInput+ % "," "," "..." }
   ;
 FnSigInput = { pat:Pat ":" }? ty:Type;
