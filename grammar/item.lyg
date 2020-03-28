@@ -85,15 +85,16 @@ ImplItemKind =
   ;
 
 FnHeader = constness:"const"? unsafety:"unsafe"? asyncness:"async"? { "extern" abi:Abi }?;
-FnDecl = name:IDENT generics:Generics? "(" args:FnArgs? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
+FnDecl = name:IDENT generics:Generics? "(" params:FnParams? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
-FnArgs =
-  | Regular:FnArg+ %% ","
+FnParams =
+  | Regular:FnParam+ %% ","
   | Variadic:"..."
-  | RegularAndVariadic:{ args:FnArg+ % "," "," "..." }
+  | RegularAndVariadic:{ args:FnParam+ % "," "," "..." }
   ;
-FnArg =
+FnParam = attrs:OuterAttr* kind:FnParamKind;
+FnParamKind =
   | SelfValue:{ mutable:"mut"? "self" }
   | SelfRef:{ "&" lt:LIFETIME? mutable:"mut"? "self" }
   | Regular:FnSigInput

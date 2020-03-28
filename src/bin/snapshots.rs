@@ -61,8 +61,8 @@ fn test_snapshot(file: walkdir::DirEntry) {
         AssocTypeConstraint
         // item.lyg
         ModuleContents Item ItemKind UseTree UseTreePrefix ForeignItem ForeignItemKind TraitItem
-        TraitItemKind ImplItem ImplItemKind FnHeader FnDecl FnArgs FnArg EnumVariant EnumVariantKind
-        StructBody TupleField RecordField
+        TraitItemKind ImplItem ImplItemKind FnHeader FnDecl FnParams FnParam EnumVariant
+        EnumVariantKind StructBody TupleField RecordField
         // macro.lyg
         MacroCall MacroInput ItemMacroCall ItemMacroInput
         // pat.lyg
