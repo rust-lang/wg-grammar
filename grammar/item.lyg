@@ -84,7 +84,7 @@ ImplItemKind =
   | MacroCall:ItemMacroCall
   ;
 
-FnHeader = constness:"const"? unsafety:"unsafe"? asyncness:"async"? { "extern" abi:Abi }?;
+FnHeader = constness:"const"? asyncness:"async"? unsafety:"unsafe"? { "extern" abi:Abi }?;
 FnDecl = name:IDENT generics:Generics? "(" params:FnParams? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
