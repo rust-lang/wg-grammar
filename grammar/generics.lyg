@@ -25,19 +25,22 @@ TypeTraitBound = unbound:"?"? binder:ForAllBinder? path:Path;
 
 // Generic args of a path segment.
 GenericArgs =
-  | AngleBracket:{ "<" args_and_bindings:AngleBracketGenericArgsAndBindings? ">" }
+  | AngleBracket:{ "<" args_and_bindings:AngleBracketGenericArgsAndConstraints? ">" }
   | Paren:{ "(" inputs:Type* %% "," ")" { "->" output:Type }? }
   ;
 
 // FIXME(eddyb) find a way to express this `A* B*` pattern better
-AngleBracketGenericArgsAndBindings =
+AngleBracketGenericArgsAndConstraints =
   | Args:GenericArg+ %% ","
-  | Bindings:TypeBinding+ %% ","
-  | ArgsAndBindings:{ args:GenericArg+ % "," "," bindings:TypeBinding+ %% "," }
+  | Constraints:AssocTypeConstraint+ %% ","
+  | ArgsAndConstraints:{ args:GenericArg+ % "," "," constraints:AssocTypeConstraint+ %% "," }
   ;
 
 GenericArg =
   | Lifetime:LIFETIME
   | Type:Type
   ;
-TypeBinding = name:IDENT "=" ty:Type;
+AssocTypeConstraint =
+  | Eq:{ name:IDENT "=" ty:Type }
+  // unstable(associated_type_bounds):
+  | Bound:{ name:IDENT ":" bounds:TypeBound* %% "+" };

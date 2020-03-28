@@ -57,8 +57,8 @@ fn test_snapshot(file: walkdir::DirEntry) {
         If Cond ElseExpr MatchArm ClosureArg
         // generics.lyg
         Generics GenericParam GenericParamKind ForAllBinder WhereClause WhereBound LifetimeBound
-        TypeBound TypeTraitBound GenericArgs AngleBracketGenericArgsAndBindings GenericArg
-        TypeBinding
+        TypeBound TypeTraitBound GenericArgs AngleBracketGenericArgsAndConstraints GenericArg
+        AssocTypeConstraint
         // item.lyg
         ModuleContents Item ItemKind UseTree UseTreePrefix ForeignItem ForeignItemKind TraitItem
         TraitItemKind ImplItem ImplItemKind FnHeader FnDecl FnArgs FnArg EnumVariant EnumVariantKind
