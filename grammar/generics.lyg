@@ -23,7 +23,10 @@ TypeBound =
   | Trait:TypeTraitBound
   | TraitParen:{ "(" bound:TypeTraitBound ")" }
   ;
-TypeTraitBound = unbound:"?"? binder:ForAllBinder? path:Path;
+TypeTraitBound =
+  // unstable(const_trait_bound_opt_out):
+  maybe_const:{ "?" "const" }?
+  maybe:"?"? binder:ForAllBinder? path:Path;
 
 // Generic args of a path segment.
 GenericArgs =
