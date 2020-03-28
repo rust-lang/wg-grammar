@@ -33,6 +33,8 @@ ItemKind =
       // unstable(specialization):
       defaultness:"default"?
       unsafety:"unsafe"? "impl" generics:Generics?
+      // unstable(const_trait_impl)
+      constness:"const"?
       { negate:"!"? trait_path:Path "for" }? ty:Type
       where_clause:WhereClause? "{" attrs:InnerAttr* impl_items:ImplItem* "}"
     }
