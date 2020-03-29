@@ -171,7 +171,7 @@ fn ambiguity_check(handle: &ModuleContentsHandle) -> Result<(), MoreThanOne> {
                         add_children(&[child]);
                     }
                 }
-                NodeShape::Choice => add_children(&[forest.one_choice(source)?]),
+                NodeShape::Choice(_) => add_children(&[forest.one_choice(source)?]),
                 NodeShape::Split(..) => {
                     let (left, right) = forest.one_split(source)?;
                     add_children(&[left, right])
