@@ -21,18 +21,19 @@ ItemKind =
       auto:"auto"?
       "trait" name:IDENT generics:Generics?
       { ":" superbounds:TypeBound* %% "+" }?
-      where_clause:WhereClause? "{" trait_items:TraitItem* "}"
+      where_clause:WhereClause? "{" attrs:InnerAttr* trait_items:TraitItem* "}"
     }
   // unstable(trait_alias):
   | TraitAlias:{
-    "trait" name:IDENT generics:Generics?
-        { ":" superbounds:TypeBound* %% "+" }?
-        where_clause:WhereClause? "=" bounds:TypeBound* %% "+" ";"
+      "trait" name:IDENT generics:Generics? "=" bounds:TypeBound* %% "+"
+      where_clause:WhereClause? ";"
     }
   | Impl:{
       // unstable(specialization):
       defaultness:"default"?
       unsafety:"unsafe"? "impl" generics:Generics?
+      // unstable(const_trait_impl)
+      constness:"const"?
       { negate:"!"? trait_path:Path "for" }? ty:Type
       where_clause:WhereClause? "{" attrs:InnerAttr* impl_items:ImplItem* "}"
     }
@@ -84,20 +85,23 @@ ImplItemKind =
   | MacroCall:ItemMacroCall
   ;
 
-FnHeader = constness:"const"? unsafety:"unsafe"? asyncness:"async"? { "extern" abi:Abi }?;
-FnDecl = name:IDENT generics:Generics? "(" args:FnArgs? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
+FnHeader = constness:"const"? asyncness:"async"? unsafety:"unsafe"? { "extern" abi:Abi }?;
+FnDecl = name:IDENT generics:Generics? "(" params:FnParams? ")" { "->" ret_ty:Type }? where_clause:WhereClause?;
 
 // FIXME(eddyb) find a way to express this `A* B?` pattern better
-FnArgs =
-  | Regular:FnArg+ %% ","
-  | Variadic:"..."
-  | RegularAndVariadic:{ args:FnArg+ % "," "," "..." }
+FnParams =
+  | Regular:FnParam+ %% ","
+  | CVariadic:FnCVariadicParam
+  | RegularAndCVariadic:{ args:FnParam+ % "," "," c_variadic:FnCVariadicParam }
   ;
-FnArg =
+FnParam = attrs:OuterAttr* kind:FnParamKind;
+FnParamKind =
   | SelfValue:{ mutable:"mut"? "self" }
   | SelfRef:{ "&" lt:LIFETIME? mutable:"mut"? "self" }
-  | Regular:FnSigInput
+  | Regular:{ { pat:Pat ":" }? ty:Type }
   ;
+// unstable(c_variadic):
+FnCVariadicParam = attrs:OuterAttr* { pat:Pat ":" }? "...";
 
 EnumVariant = attrs:OuterAttr* name:IDENT kind:EnumVariantKind { "=" discr:Expr }?;
 EnumVariantKind =

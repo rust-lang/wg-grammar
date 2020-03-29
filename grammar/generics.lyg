@@ -3,6 +3,8 @@ GenericParam = attrs:OuterAttr* kind:GenericParamKind;
 GenericParamKind =
   | Lifetime:{ name:LIFETIME { ":" bounds:LifetimeBound* %% "+" }? }
   | Type:{ name:IDENT { ":" bounds:TypeBound* %% "+" }? { "=" default:Type }? }
+  // unstable(const_generics):
+  | Const:{ "const" name:IDENT ":" ty:Type }
   ;
 
 ForAllBinder = "for" generics:Generics;
@@ -21,23 +23,31 @@ TypeBound =
   | Trait:TypeTraitBound
   | TraitParen:{ "(" bound:TypeTraitBound ")" }
   ;
-TypeTraitBound = unbound:"?"? binder:ForAllBinder? path:Path;
+TypeTraitBound =
+  // unstable(const_trait_bound_opt_out):
+  maybe_const:{ "?" "const" }?
+  maybe:"?"? binder:ForAllBinder? path:Path;
 
 // Generic args of a path segment.
 GenericArgs =
-  | AngleBracket:{ "<" args_and_bindings:AngleBracketGenericArgsAndBindings? ">" }
+  | AngleBracket:{ "<" args_and_bindings:AngleBracketGenericArgsAndConstraints? ">" }
   | Paren:{ "(" inputs:Type* %% "," ")" { "->" output:Type }? }
   ;
 
 // FIXME(eddyb) find a way to express this `A* B*` pattern better
-AngleBracketGenericArgsAndBindings =
+AngleBracketGenericArgsAndConstraints =
   | Args:GenericArg+ %% ","
-  | Bindings:TypeBinding+ %% ","
-  | ArgsAndBindings:{ args:GenericArg+ % "," "," bindings:TypeBinding+ %% "," }
+  | Constraints:AssocTypeConstraint+ %% ","
+  | ArgsAndConstraints:{ args:GenericArg+ % "," "," constraints:AssocTypeConstraint+ %% "," }
   ;
 
 GenericArg =
   | Lifetime:LIFETIME
   | Type:Type
+  // unstable(const_generics):
+  | Const:{ neg:"-"? lit:LITERAL | "{" expr:Expr "}" }
   ;
-TypeBinding = name:IDENT "=" ty:Type;
+AssocTypeConstraint =
+  | Eq:{ name:IDENT "=" ty:Type }
+  // unstable(associated_type_bounds):
+  | Bound:{ name:IDENT ":" bounds:TypeBound* %% "+" };
