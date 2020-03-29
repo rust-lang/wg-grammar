@@ -100,6 +100,17 @@ impl<A, Pat> From<gll::grammer::parser::ParseError<A, Pat>> for Error<A, Pat> {
 /// using the `ModuleContents` rule, and pass the result to `f`.
 fn parse_file(path: &Path) -> ModuleContentsResult {
     let src = fs::read_to_string(path).unwrap();
+
+    // Strip shebang, using the same logic as `rustc_lexer`.
+    // FIXME(rust-lang/rust#70528) this may have to change in the future.
+    let src = if src.starts_with("#!") && !src.starts_with("#![") {
+        // Remove the first line's contents, i.e. up to the `\n`,
+        // but keep the `\n` so that the line numbers remain correct.
+        &src[src.find('\n').unwrap_or(src.len())..]
+    } else {
+        &src[..]
+    };
+
     let tts = src.parse::<proc_macro2::TokenStream>()?;
     let res = parse::ModuleContents::parse(tts)?;
     Ok(res)
