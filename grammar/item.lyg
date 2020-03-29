@@ -21,7 +21,7 @@ ItemKind =
       auto:"auto"?
       "trait" name:IDENT generics:Generics?
       { ":" superbounds:TypeBound* %% "+" }?
-      where_clause:WhereClause? "{" trait_items:TraitItem* "}"
+      where_clause:WhereClause? "{" attrs:InnerAttr* trait_items:TraitItem* "}"
     }
   // unstable(trait_alias):
   | TraitAlias:{
