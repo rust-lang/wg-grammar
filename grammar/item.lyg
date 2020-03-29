@@ -25,9 +25,8 @@ ItemKind =
     }
   // unstable(trait_alias):
   | TraitAlias:{
-    "trait" name:IDENT generics:Generics?
-        { ":" superbounds:TypeBound* %% "+" }?
-        where_clause:WhereClause? "=" bounds:TypeBound* %% "+" ";"
+      "trait" name:IDENT generics:Generics? "=" bounds:TypeBound* %% "+"
+      where_clause:WhereClause? ";"
     }
   | Impl:{
       // unstable(specialization):
