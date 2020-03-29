@@ -98,10 +98,10 @@ FnParam = attrs:OuterAttr* kind:FnParamKind;
 FnParamKind =
   | SelfValue:{ mutable:"mut"? "self" }
   | SelfRef:{ "&" lt:LIFETIME? mutable:"mut"? "self" }
-  | Regular:FnSigInput
+  | Regular:{ { pat:Pat ":" }? ty:Type }
   ;
 // unstable(c_variadic):
-FnCVariadicParam = { pat:Pat ":" }? "...";
+FnCVariadicParam = attrs:OuterAttr* { pat:Pat ":" }? "...";
 
 EnumVariant = attrs:OuterAttr* name:IDENT kind:EnumVariantKind { "=" discr:Expr }?;
 EnumVariantKind =

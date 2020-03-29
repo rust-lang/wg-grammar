@@ -129,4 +129,4 @@ ElseExpr =
 
 MatchArm = attrs:OuterAttr* "|"? pat:Pat { "if" guard:Expr }? "=>" body:Expr ","?;
 
-ClosureArg = pat:Pat { ":" ty:Type }?;
+ClosureArg = attrs:OuterAttr* pat:Pat { ":" ty:Type }?;
