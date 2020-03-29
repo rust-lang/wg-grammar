@@ -2,6 +2,8 @@ Expr = attrs:OuterAttr* kind:ExprKind;
 ExprKind =
   | Literal:LITERAL
   | Paren:{ "(" attrs:InnerAttr* expr:Expr ")" }
+  // unstable(raw_ref_op):
+  | RawAddrOf:{ "&" "raw" { "const" | mutable:"mut" } expr:Expr }
   | Borrow:{ "&" mutable:"mut"? expr:Expr }
   | Box:{ "box" expr:Expr }
   | Unary:{ op:UnaryOp expr:Expr }
