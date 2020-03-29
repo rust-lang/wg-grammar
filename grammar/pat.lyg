@@ -43,7 +43,8 @@ StructPatFieldsAndEllipsis =
   | FieldsAndEllipsis:{ fields:StructPatField+ % "," "," ".." }
   ;
 
-StructPatField =
+StructPatField = attrs:OuterAttr* kind:StructPatFieldKind;
+StructPatFieldKind =
   | Shorthand:Binding
   | Explicit:{ field:FieldName ":" pat:Pat }
   ;
